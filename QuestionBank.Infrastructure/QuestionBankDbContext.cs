@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuestionBank.Application.Contracts.Persistence;
+using QuestionBank.Domain.Entities;
 using QuestionBank.Domain.Entities.Common;
 
 namespace QuestionBank.Infrastructure;
@@ -29,4 +30,9 @@ public class QuestionBankDbContext : DbContext, IQuestionBankDbContext
 
         return base.SaveChangesAsync(cancellationToken);
     }
+
+    public DbSet<Interview> Interviews { get; set; }
+    public DbSet<Skill> Skills { get; set; }
+    public DbSet<InterviewSkill> InterviewSkills { get; set; }
+    public DbSet<Question> Questions { get; set; }
 }
