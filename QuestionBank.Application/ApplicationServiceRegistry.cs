@@ -6,9 +6,9 @@ namespace QuestionBank.Application;
 public static class ApplicationServiceRegistry
 {
     /// <summary>
-    /// Adds the Application services.
+    /// Registers application-level services, including MediatR handlers from the current assembly.
     /// </summary>
-    /// <param name="services">The services.</param>
+    /// <param name="services">The service collection to which services are added.</param>
     public static void AddApplicationServices(this IServiceCollection services)
     {
         services.AddMediatR(cfg =>
