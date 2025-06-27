@@ -7,6 +7,11 @@ namespace QuestionBank.Infrastructure;
 
 public static class InfrastructureServiceRegistry
 {
+    /// <summary>
+    /// Adds infrastructure services to the dependency injection container, including the database context.
+    /// </summary>
+    /// <param name="services">The service collection to which services are added.</param>
+    /// <param name="configuration">The application configuration object, used to access connection strings.</param>
     public static void AddInfrastructureServices(this IServiceCollection services,
     IConfiguration configuration)
     {
