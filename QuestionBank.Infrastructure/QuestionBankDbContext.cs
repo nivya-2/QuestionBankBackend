@@ -24,7 +24,7 @@ public class QuestionBankDbContext : DbContext, IQuestionBankDbContext
     /// <param name="modelBuilder">The builder used to construct the model.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Apply configurations explicitly
+        // Apply the configurations explicitly
         modelBuilder.ApplyConfiguration(new InterviewConfiguration());
         modelBuilder.ApplyConfiguration(new QuestionConfiguration());
         modelBuilder.ApplyConfiguration(new SkillConfiguration());
