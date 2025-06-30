@@ -8,18 +8,18 @@ namespace QuestionBank.Domain.Entities;
 public class Question : BaseDomainEntity
 {
     /// <summary>
-    /// Foreign key referencing the associated interview.
+    /// Gets or sets the foreign key referencing the associated interview.
     /// </summary>
     public int InterviewId { get; set; }
 
     /// <summary>
-    /// The text of the interview question.
+    /// Gets or sets the text of the interview question.
     /// </summary>
     /// <example>What is EF Core?</example>
     public string QuestionText { get; set; } = null!;
 
     /// <summary>
-    /// Navigation property for the related interview.
+    /// Gets or sets the navigation property for the related interview.
     /// </summary>
     public Interview Interview { get; set; } = null!;
 }

@@ -10,10 +10,6 @@ public class QuestionBankEnums
     /// </summary>
     public enum InterviewStatus
     {
-        /// <summary>
-        /// A newly created interview that hasn't been edited yet (Next button not clicked).
-        /// </summary>
-        New,
 
         /// <summary>
         /// An interview that is in progress but not finalized (Next button clicked).
