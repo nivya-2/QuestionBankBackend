@@ -18,7 +18,7 @@ public class Interview : BaseDomainEntity2
     /// <summary>
     /// Gets or sets the current status of the interview (e.g., New, Draft, Submitted).
     /// </summary>
-    public InterviewStatus Status { get; set; } = InterviewStatus.New;
+    public InterviewStatus Status { get; set; } = InterviewStatus.Draft;
 
     /// <summary>
     /// Gets or sets the years of experience required or relevant for the interview.
