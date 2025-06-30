@@ -1,0 +1,63 @@
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using QuestionBank.Application.Contracts.Persistence;
+using QuestionBank.Application.Dto;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace QuestionBank.Application.Features.InterviewManagement;
+
+/// <summary>
+/// Query to retrieve an interview by its ID.
+/// </summary>
+public class GetInterviewByIdQuery : IRequest<InterviewDto>
+{
+    /// <summary>
+    /// The ID of the interview to retrieve.
+    /// </summary>
+    public int InterviewId { get; set; }
+}
+
+/// <summary>
+/// Handles the <see cref="GetInterviewByIdQuery"/> to fetch a single interview from the database.
+/// </summary>
+public class GetInterviewByIdQueryHandler : IRequestHandler<GetInterviewByIdQuery, InterviewDto?>
+{
+    private readonly IQuestionBankDbContext _dbContext;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GetInterviewByIdQueryHandler"/> class.
+    /// </summary>
+    /// <param name="dbContext">Database context injected via dependency injection.</param>
+    public GetInterviewByIdQueryHandler(IQuestionBankDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    /// <summary>
+    /// Handles the query to fetch a specific interview by ID along with its skill names.
+    /// </summary>
+    /// <param name="request">Query containing the interview ID.</param>
+    /// <param name="cancellationToken">Cancellation token for async operations.</param>
+    /// <returns>An interview DTO or null if not found.</returns>
+    public async Task<InterviewDto?> Handle(GetInterviewByIdQuery request, CancellationToken cancellationToken)
+    {
+        var interview = await _dbContext.Interviews
+            .Include(i => i.InterviewSkills)
+                .ThenInclude(link => link.Skill)
+            .Where(i => i.Id == request.InterviewId)
+            .Select(i => new InterviewDto
+            {
+                Role = i.Role,
+                InterviewStatus = i.Status.ToString(),
+                Experience = i.Experience ?? 0f,
+                InterviewSkills = i.InterviewSkills
+                                    .Select(skill => skill.Skill.Name)
+                                    .ToList()
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return interview;
+    }
+}
