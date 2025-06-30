@@ -3,12 +3,12 @@
 namespace QuestionBank.Domain.Entities;
 
 /// <summary>
-/// Represents a skill that can be associated with a interview role.
+/// Represents a skill that can be associated with an interview role.
 /// </summary>
 public class Skill : BaseDomainEntity
 {
     /// <summary>
-    /// Name of the skill (e.g., "C#", "Angular").
+    /// Gets or sets the name of the skill (e.g., "C#", "Angular").
     /// </summary>
     /// <example>C#</example>
     public string Name { get; set; } = null!;

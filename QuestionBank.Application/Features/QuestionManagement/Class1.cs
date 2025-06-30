@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuestionBank.Application.Features
+namespace QuestionBank.Application.Features.QuestionManagement
 {
     internal class Class1
     {
