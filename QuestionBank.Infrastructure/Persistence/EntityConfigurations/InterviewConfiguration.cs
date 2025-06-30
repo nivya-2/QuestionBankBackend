@@ -27,7 +27,7 @@ public class InterviewConfiguration : IEntityTypeConfiguration<Interview>
         {
             Id = 1,
             Role = "Backend Developer",
-            Status = InterviewStatus.New,
+            Status = InterviewStatus.Draft,
             Experience = 2,
             CreatedBy = "seeder",
             CreatedOn = new DateTime(2025, 06, 27, 0, 0, 0, DateTimeKind.Utc),
