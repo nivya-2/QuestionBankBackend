@@ -8,58 +8,18 @@ using System.Threading.Tasks;
 
 
 namespace QuestionBank.Application.Features.InterviewManagement;
-
-#region LLD: UpdateInterviewCommand
-/*
-Overview:
----------
-This command updates an existing interview record in the database, including:
-- Basic details such as Role, Status, and Experience.
-- Associated skill mappings through `InterviewSkills` by replacing existing ones with new skill IDs.
-
-Process Flow:
--------------
-1. The command is triggered with:
-   - InterviewId: The ID of the interview to be updated.
-   - Role: The new job title or position.
-   - InterviewStatus: The updated status in string form (converted to enum).
-   - Experience: Updated years of experience.
-   - SkillIds: A list of skill IDs to associate with the interview.
-
-2. The handler fetches the interview entity from the database using InterviewId,
-   including existing InterviewSkill associations for cleanup.
-
-3. If no interview is found:
-   -> Return `false`, indicating the update failed.
-
-4. If interview exists:
-   - Update the `Role`, `Experience`, and `Status` (after parsing string to enum).
-   - If enum parsing fails, retain the original status.
-
-5. Remove all existing `InterviewSkills` linked to this interview to prevent duplication or orphaned records.
-
-6. Loop through the provided SkillIds and create new `InterviewSkill` entries
-   that associate the current interview with the updated skills.
-
-7. Save all changes to the database in a single operation via `SaveChangesAsync`.
-
-8. Return `true` to indicate a successful update.
-
-Output:
--------
-- Returns `true` if the interview is found and successfully updated (including skills).
-- Returns `false` if no interview is found for the given InterviewId.
-
-Design Considerations:
-----------------------
-- All updates and relationship changes are performed in a single transaction context.
-- Uses eager loading (`Include`) for InterviewSkills to enable correct deletion and re-association.
-- Handles enum parsing gracefully to avoid crashing on invalid string input.
-- Clears and resets interview-skill links instead of trying to diff the lists, simplifying logic.
-- Respects cancellation via `cancellationToken`.
-
-*/
+#region LLD: UpdateInterview
+//Requires: dbContext, InterviewId, Role, InterviewStatus, Experience, SkillIds
+// 1. Receive InterviewId and the updated data: Role, Experience, Status, SkillIds.
+// 2. Fetch the Interview entity including its current InterviewSkills.
+// 3. If the interview does not exist, return false.
+// 4. Update the interview’s Role, Experience, and Status (parse string to enum).
+// 5. Remove all existing InterviewSkill records linked to this interview.
+// 6. For each SkillId in the request, create a new InterviewSkill and add it to the interview.
+// 7. Save all changes to the database.
+// 8. Return true to indicate success.
 #endregion
+
 
 /// <summary>
 /// Command to update an existing interview.

@@ -1,11 +1,10 @@
-namespace QuestionBankTest
-{
-    public class QuestionBankTests
-    {
-        [Fact]
-        public void Test1()
-        {
+namespace QuestionBankTest;
 
-        }
+public class GetAllInterviwsQueryHandlerTests
+{
+    [Fact]
+    public void GetAllInterviwsQueryHandler_WhenRequestedWithValidId_ShouldReturnResults()
+    {
+
     }
 }
