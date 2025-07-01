@@ -24,6 +24,7 @@ public class QuestionBankController : BaseController
     [ProducesResponseType(typeof(List<InterviewsDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetAllInterviews()
     {
+
         var result = await Mediator.Send(new GetAllInterviewsQuery());
         return Ok(result);
     }
@@ -43,6 +44,7 @@ public class QuestionBankController : BaseController
 
         return Ok(result);
     }
+
 
     /// <summary>
     /// Updates an existing interview with new details.
