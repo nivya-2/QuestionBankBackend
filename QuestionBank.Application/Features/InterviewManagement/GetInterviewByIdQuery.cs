@@ -15,6 +15,7 @@ public class GetInterviewByIdQuery : IRequest<InterviewDto>
     /// <summary>
     /// The ID of the interview to retrieve.
     /// </summary>
+    /// <example>42</example>
     public int InterviewId { get; set; }
 }
 
@@ -53,7 +54,7 @@ public class GetInterviewByIdQueryHandler : IRequestHandler<GetInterviewByIdQuer
         // 4. If the interview is found:
         //    - Map it into InterviewDto.
         //    - Return the DTO object
-        // 5. If not found, return null.
+        // 5. If not found, throw KeyNotFoundException.
         #endregion
 
         var interview = await _dbContext.Interviews
@@ -70,6 +71,8 @@ public class GetInterviewByIdQueryHandler : IRequestHandler<GetInterviewByIdQuer
                                     .ToList()
             })
             .FirstOrDefaultAsync(cancellationToken);
+        if (interview == null)
+            throw new KeyNotFoundException($"Interview with ID {request.InterviewId} not found.");
         return interview;
     }
 }

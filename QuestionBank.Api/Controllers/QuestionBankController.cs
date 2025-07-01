@@ -37,12 +37,15 @@ public class QuestionBankController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetInterviewById([FromRoute] int id)
     {
-        var result = await Mediator.Send(new GetInterviewByIdQuery { InterviewId = id });
-
-        if (result == null)
-            return NotFound();
-
-        return Ok(result);
+        try
+        {
+            var result = await Mediator.Send(new GetInterviewByIdQuery { InterviewId = id });
+            return Ok(result);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message); 
+        }
     }
 
     /// <summary>
@@ -56,10 +59,15 @@ public class QuestionBankController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> UpdateInterview([FromRoute] int id, [FromBody] UpdateInterviewCommand command)
     {
-        command.InterviewId = id;
-        var success = await Mediator.Send(command);
-        if (!success)
-            return NotFound();
-        return NoContent();
+        try
+        {
+            command.InterviewId = id;
+            await Mediator.Send(command);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message); 
+        }
     }
 }
