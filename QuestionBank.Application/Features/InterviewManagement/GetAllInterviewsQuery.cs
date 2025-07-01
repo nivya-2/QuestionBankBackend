@@ -2,45 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using QuestionBank.Application.Contracts.Persistence;
 using QuestionBank.Application.Dto;
+using QuestionBank.Domain.Entities;
 
 namespace QuestionBank.Application.Features.InterviewManagement;
-
-#region LLD: GetAllInterviewsQuery
-/*
-Overview:
----------
-This query retrieves a complete list of all interview records from the database.
-Each record is returned in a lightweight DTO (`InterviewsDto`) that includes:
-- The interview ID.
-- The job role/title associated with the interview.
-- The current interview status (converted from enum to string).
-- Metadata such as created date and creator.
-
-Process Flow:
--------------
-1. The client triggers this query via a GET request to `/api/interviews`.
-2. MediatR calls the `Handle` method of `GetAllInterviewsQueryHandler`.
-3. The handler queries the `Interviews` DbSet using Entity Framework Core.
-4. A projection is performed using `.Select()` to directly map data into `InterviewsDto`:
-   - Interview ID, Role, Status (converted to string), CreatedBy, CreatedOn.
-5. The result is materialized using `.ToListAsync()` and returned.
-
-Output:
--------
-- If interviews exist:
-   -> A list of `InterviewsDto` records is returned.
-- If no interviews exist:
-   -> An empty list is returned.
-
-Design Considerations:
-----------------------
-- Read-only query, compliant with CQRS principles (no side effects).
-- Projection is done at the database level for optimal performance.
-- Enum `Status` is explicitly converted to string to improve client readability (e.g., Swagger).
-- Asynchronous handling is used with proper cancellation support.
-- DTO abstracts away domain internals; only client-relevant data is exposed.
-*/
-#endregion
 
 /// <summary>
 /// Represents a request to retrieve all interviews.
@@ -76,6 +40,12 @@ public class GetAllInterviewsQueryHandler : IRequestHandler<GetAllInterviewsQuer
     /// <returns>A list of <see cref="InterviewsDto"/> containing interview details.</returns>
     public async Task<List<InterviewsDto>> Handle(GetAllInterviewsQuery request, CancellationToken cancellationToken)
     {
+        #region LLD: GetAllInterviewsQuery
+        // 1. Query all interview entities from the database.
+        // 2. Project each interview entity to InterviewsDto.
+        // 3. Convert enum `Status` to string for display.
+        // 4. Return the list of DTOs.
+        #endregion
         var interviews = await _questionBankDbContext.Interviews
             .Select( interview => new InterviewsDto()
             {
