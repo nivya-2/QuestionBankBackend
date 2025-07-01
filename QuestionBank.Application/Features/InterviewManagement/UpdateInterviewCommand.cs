@@ -8,19 +8,6 @@ using System.Threading.Tasks;
 
 
 namespace QuestionBank.Application.Features.InterviewManagement;
-#region LLD: UpdateInterview
-//Requires: dbContext, InterviewId, Role, InterviewStatus, Experience, SkillIds
-// 1. Receive InterviewId and the updated data: Role, Experience, Status, SkillIds.
-// 2. Fetch the Interview entity including its current InterviewSkills.
-// 3. If the interview does not exist, return false.
-// 4. Update the interview’s Role, Experience, and Status (parse string to enum).
-// 5. Remove all existing InterviewSkill records linked to this interview.
-// 6. For each SkillId in the request, create a new InterviewSkill and add it to the interview.
-// 7. Save all changes to the database.
-// 8. Return true to indicate success.
-#endregion
-
-
 /// <summary>
 /// Command to update an existing interview.
 /// </summary>
@@ -57,15 +44,44 @@ public class UpdateInterviewCommand : IRequest<bool>
 /// </summary>
 public class UpdateInterviewCommandHandler : IRequestHandler<UpdateInterviewCommand, bool>
 {
+    /// <summary>
+    /// EF Core database context for accessing and updating interview data.
+    /// </summary>
     private readonly IQuestionBankDbContext _dbContext;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UpdateInterviewCommandHandler"/> class.
+    /// </summary>
+    /// <param name="dbContext">Database context used to access and update interview entities.</param>
     public UpdateInterviewCommandHandler(IQuestionBankDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
+    /// <summary>
+    /// Handles the <see cref="UpdateInterviewCommand"/> by updating an existing interview's details
+    /// and its associated skills in the database.
+    /// </summary>
+    /// <param name="request">Command containing updated interview details and skill IDs.</param>
+    /// <param name="cancellationToken">Cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>
+    /// Returns <c>true</c> if the interview was successfully updated; 
+    /// <c>false</c> if the interview does not exist.
+    /// </returns>
     public async Task<bool> Handle(UpdateInterviewCommand request, CancellationToken cancellationToken)
     {
+        #region LLD: UpdateInterview
+        //Requires: dbContext, InterviewId, Role, InterviewStatus, Experience, SkillIds
+        // 1. Receive InterviewId and the updated data: Role, Experience, Status, SkillIds.
+        // 2. Fetch the Interview entity including its current InterviewSkills.
+        // 3. If the interview does not exist, return false.
+        // 4. Update the interview’s Role, Experience, and Status (parse string to enum).
+        // 5. Remove all existing InterviewSkill records linked to this interview.
+        // 6. For each SkillId in the request, create a new InterviewSkill and add it to the interview.
+        // 7. Save all changes to the database.
+        // 8. Return true to indicate success.
+        #endregion
+
         // Retrieve the interview along with its existing InterviewSkills.
         // If the interview does not exist, return false indicating failure.
         var interview = await _dbContext.Interviews

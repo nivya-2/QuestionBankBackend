@@ -7,18 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace QuestionBank.Application.Features.InterviewManagement;
-#region LLD: GetInterviewByIdQuery
-//Requires: dbContext, InterviewId
-// 1. Receive the InterviewId through the request.
-// 2. Query the Interviews table with the given ID.
-// 3. Eager load the associated InterviewSkills and their Skill details.
-// 4. If the interview is found:
-//    - Map it into InterviewDto.
-//    - Return the DTO object
-// 5. If not found, return null.
-#endregion
-
-
 /// <summary>
 /// Query to retrieve an interview by its ID.
 /// </summary>
@@ -35,6 +23,9 @@ public class GetInterviewByIdQuery : IRequest<InterviewDto>
 /// </summary>
 public class GetInterviewByIdQueryHandler : IRequestHandler<GetInterviewByIdQuery, InterviewDto?>
 {
+    /// <summary>
+    /// Database context used to query interview data.
+    /// </summary>
     private readonly IQuestionBankDbContext _dbContext;
 
     /// <summary>
@@ -54,6 +45,17 @@ public class GetInterviewByIdQueryHandler : IRequestHandler<GetInterviewByIdQuer
     /// <returns>An interview DTO or null if not found.</returns>
     public async Task<InterviewDto?> Handle(GetInterviewByIdQuery request, CancellationToken cancellationToken)
     {
+        #region LLD: GetInterviewByIdQuery
+        //Requires: dbContext, InterviewId
+        // 1. Receive the InterviewId through the request.
+        // 2. Query the Interviews table with the given ID.
+        // 3. Eager load the associated InterviewSkills and their Skill details.
+        // 4. If the interview is found:
+        //    - Map it into InterviewDto.
+        //    - Return the DTO object
+        // 5. If not found, return null.
+        #endregion
+
         var interview = await _dbContext.Interviews
             .Include(i => i.InterviewSkills)
                 .ThenInclude(link => link.Skill)
