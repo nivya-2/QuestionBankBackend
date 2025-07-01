@@ -21,6 +21,9 @@ public class GetAllInterviewsQuery : IRequest<List<InterviewsDto>>
 /// </summary>
 public class GetAllInterviewsQueryHandler : IRequestHandler<GetAllInterviewsQuery, List<InterviewsDto>>
 {
+    /// <summary>
+    /// Provides access to the database context for querying interview-related data.
+    /// </summary>
     private readonly IQuestionBankDbContext _questionBankDbContext;
 
     /// <summary>
@@ -47,6 +50,7 @@ public class GetAllInterviewsQueryHandler : IRequestHandler<GetAllInterviewsQuer
         // 4. Return the list of DTOs.
         #endregion
         var interviews = await _questionBankDbContext.Interviews
+            .AsQueryable()
             .Select( interview => new InterviewsDto()
             {
                 Id = interview.Id,
