@@ -70,7 +70,6 @@ public class GetInterviewByIdQueryHandler : IRequestHandler<GetInterviewByIdQuer
                                     .ToList()
             })
             .FirstOrDefaultAsync(cancellationToken);
-
         return interview;
     }
 }

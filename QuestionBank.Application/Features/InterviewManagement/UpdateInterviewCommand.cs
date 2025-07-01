@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace QuestionBank.Application.Features.InterviewManagement;
+
 /// <summary>
 /// Command to update an existing interview.
 /// </summary>
@@ -38,6 +38,7 @@ public class UpdateInterviewCommand : IRequest<bool>
     /// </summary>
     public List<int> SkillIds { get; set; } = new();
 }
+
 /// <summary>
 /// Handles the <see cref="UpdateInterviewCommand"/> to perform an update operation
 /// on an existing interview entity, including its associated InterviewSkills.
