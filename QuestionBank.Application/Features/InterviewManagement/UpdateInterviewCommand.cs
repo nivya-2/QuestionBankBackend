@@ -128,14 +128,14 @@ public class UpdateInterviewCommandHandler : IRequestHandler<UpdateInterviewComm
          _dbContext.InterviewSkills.RemoveRange(skillsToDelete);
 
         // 4. Add new InterviewSkills for any new skill IDs
-        foreach (var skillId in skillIdsToAdd)
-        {
-            interview.InterviewSkills.Add(new InterviewSkill
+        var newSkills = skillIdsToAdd
+            .Select(skillId => new InterviewSkill
             {
                 InterviewId = interview.Id,
                 SkillId = skillId
-            });
-        }
+            })
+            .ToList();
+        interview.InterviewSkills.AddRange(newSkills);
 
         // Persist all changes to the database
         await _dbContext.SaveChangesAsync(cancellationToken);
