@@ -6,8 +6,8 @@ using QuestionBank.Domain.Entities;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
-namespace QuestionBank.Application.Features.InterviewManagement;
+using QuestionBank.Shared;
+using static QuestionBank.Shared.QuestionBankEnums;
 
 /// <summary>
 /// Command to update an existing interview.
@@ -29,8 +29,12 @@ public class UpdateInterviewCommand : IRequest<bool>
     /// <summary>
     /// Updated status for the interview.
     /// </summary>
-    /// <example>Draft</example>
-    public string InterviewStatus { get; set; } = null!;
+    /// <example>0</example>
+    /// <remarks>
+    /// Provide the numeric value of the enum InterviewStatus:
+    /// 0 = Draft, 1 = Submitted
+    /// </remarks>
+    public InterviewStatus InterviewStatus { get; set; }
 
     /// <summary>
     /// Updated experience value.
@@ -82,7 +86,7 @@ public class UpdateInterviewCommandHandler : IRequestHandler<UpdateInterviewComm
         // 1. Receive InterviewId and the updated data: Role, Experience, Status, SkillIds.
         // 2. Fetch the Interview entity including its current InterviewSkills.
         // 3. If the interview does not exist, throw an exception (invalid InterviewId).
-        // 4. Update the interview’s Role, Experience, and Status (parse string to enum).
+        // 4. Update the interview’s Role, Experience, and Status directly from enum.
         // 5. Determine which SkillIds are:
         //      - New (in request but not in DB): Add them as new InterviewSkills.
         //      - Deleted (in DB but not in request): Remove them from InterviewSkills.
@@ -103,10 +107,10 @@ public class UpdateInterviewCommandHandler : IRequestHandler<UpdateInterviewComm
             throw new KeyNotFoundException($"Interview with ID {request.InterviewId} not found.");
 
         // Update basic properties (Role, Status, Experience).
+        if (!Enum.IsDefined(typeof(InterviewStatus), request.InterviewStatus))
+            throw new ArgumentException("Invalid interview status value.");
+        interview.Status = request.InterviewStatus;
         interview.Role = request.Role;
-        interview.Status = Enum.TryParse(request.InterviewStatus, out Shared.QuestionBankEnums.InterviewStatus status)
-            ? status
-            : interview.Status;
         interview.Experience = request.Experience;
 
         // 1. Get current skill IDs from the Interview entity
