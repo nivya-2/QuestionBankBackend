@@ -18,7 +18,7 @@ public class QuestionBankController : BaseController
     /// Retrieves a list of all interviews.
     /// </summary>
     /// <returns>
-    /// An <see cref="IActionResult"/> containing a list of <see cref="InterviewsDto"/> objects and an HTTP 200 OK status.
+    /// An <see cref="IActionResult"/> containing a list of <see cref="InterviewsDto"/> objects and a HTTP 200 OK status.
     /// </returns>
     [HttpGet("interviews")]
     [ProducesResponseType(typeof(List<InterviewsDto>), (int)HttpStatusCode.OK)]
@@ -27,6 +27,7 @@ public class QuestionBankController : BaseController
         var result = await Mediator.Send(new GetAllInterviewsQuery());
         return Ok(result);
     }
+
     /// <summary>
     /// Gets all interview details.
     /// </summary>
