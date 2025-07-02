@@ -7,6 +7,47 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace QuestionBank.Application.Features.InterviewManagement;
+/*
+Overview:
+---------
+This query retrieves a single interview record from the database based on a given Interview ID.
+The goal is to return a lightweight DTO (`InterviewDto`) that contains:
+- The role name of the interview.
+- The current interview status as a string.
+- The candidate's experience in years (defaults to 0 if not available).
+- A list of skill names associated with the interview.
+
+Process Flow:
+-------------
+1. A request is received with a specific `InterviewId`.
+2. The `Handle` method is invoked by MediatR with the request and a cancellation token.
+3. The Entity Framework Core context (`_dbContext`) is used to query the `Interviews` table.
+4. To fetch the related skills, `.Include()` is used to eagerly load the `InterviewSkills` navigation property.
+   - `.ThenInclude()` is used to further load each associated `Skill` entity.
+5. The query filters the interview records by the given `InterviewId`.
+6. A projection is performed using `.Select()` to directly map the interview data into an `InterviewDto`:
+   - Role is taken directly.
+   - Status enum is converted to string.
+   - Experience is checked for null; if null, 0 is used.
+   - InterviewSkills are projected to a list of their skill names.
+7. The query returns the first matching record or null if not found.
+
+Output:
+-------
+- If a matching interview exists:
+   -> A fully populated `InterviewDto` is returned.
+- If no record matches the given ID:
+   -> The result is `null`.
+
+Design Considerations:
+----------------------
+- This is a read-only query with no side effects (CQRS-compliant).
+- Eager loading is used to reduce round trips and avoid lazy loading issues.
+- Projection is done at the database level for performance; only needed fields are selected.
+- The handler is asynchronous and respects cancellation via `cancellationToken`.
+*/
+#endregion
+
 /// <summary>
 /// Query to retrieve an interview by its ID.
 /// </summary>
