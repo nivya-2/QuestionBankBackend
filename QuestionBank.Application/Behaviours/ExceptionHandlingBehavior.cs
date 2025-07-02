@@ -23,11 +23,9 @@ public class ExceptionDetails
     /// <example>The interview with ID 42 was not found in the database.</example>
     public string Message { get; set; } = "Something went wrong.";
 
-
     /// <summary>Gets or sets the type of the exception (e.g., ArgumentException).</summary>
     /// <example>KeyNotFoundException</example>
     public string ErrorType { get; set; } = "Exception";
-
 }
 
 /// <summary>
@@ -99,7 +97,6 @@ public class ExceptionHandlingBehavior<TRequest, TResponse> : IPipelineBehavior<
                 var json = JsonSerializer.Serialize(error);
                 await context.Response.WriteAsync(json, Encoding.UTF8);
             }
-
             return default!;
         }
     }

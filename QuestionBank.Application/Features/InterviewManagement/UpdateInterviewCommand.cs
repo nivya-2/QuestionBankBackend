@@ -40,7 +40,7 @@ public class UpdateInterviewCommand : IRequest<bool>
     /// Updated experience value.
     /// </summary>
     /// <example>2.5</example>
-    public float Experience { get; set; }
+    public decimal Experience { get; set; }
 
     /// <summary>
     /// List of skill IDs to associate with the interview.

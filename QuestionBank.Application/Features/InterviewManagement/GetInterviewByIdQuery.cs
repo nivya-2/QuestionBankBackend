@@ -65,7 +65,7 @@ public class GetInterviewByIdQueryHandler : IRequestHandler<GetInterviewByIdQuer
             {
                 Role = i.Role,
                 InterviewStatus = i.Status.ToString(),
-                Experience = i.Experience ?? 0f,
+                Experience = i.Experience ?? 0m,
                 InterviewSkills = i.InterviewSkills
                                     .Select(skill => skill.Skill.Name)
                                     .ToList()
