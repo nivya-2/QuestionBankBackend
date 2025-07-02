@@ -137,6 +137,5 @@ public class UpdateInterviewCommandHandler : IRequestHandler<UpdateInterviewComm
 
         // Indicate successful update
         return true;
-
     }
 }
