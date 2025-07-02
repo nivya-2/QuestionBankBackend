@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using QuestionBank.Application.Contracts.Persistence;
 using QuestionBank.Application.Dto;
+using QuestionBank.Domain.Entities;
 
 namespace QuestionBank.Application.Features.InterviewManagement;
 
@@ -20,6 +21,9 @@ public class GetAllInterviewsQuery : IRequest<List<InterviewsDto>>
 /// </summary>
 public class GetAllInterviewsQueryHandler : IRequestHandler<GetAllInterviewsQuery, List<InterviewsDto>>
 {
+    /// <summary>
+    /// Provides access to the database context for querying interview-related data.
+    /// </summary>
     private readonly IQuestionBankDbContext _questionBankDbContext;
 
     /// <summary>
@@ -39,7 +43,14 @@ public class GetAllInterviewsQueryHandler : IRequestHandler<GetAllInterviewsQuer
     /// <returns>A list of <see cref="InterviewsDto"/> containing interview details.</returns>
     public async Task<List<InterviewsDto>> Handle(GetAllInterviewsQuery request, CancellationToken cancellationToken)
     {
+        #region LLD: GetAllInterviewsQuery
+        // 1. Query all interview entities from the database.
+        // 2. Project each interview entity to InterviewsDto.
+        // 3. Convert enum `Status` to string for display.
+        // 4. Return the list of DTOs.
+        #endregion
         var interviews = await _questionBankDbContext.Interviews
+            .AsQueryable()
             .Select( interview => new InterviewsDto()
             {
                 Id = interview.Id,
