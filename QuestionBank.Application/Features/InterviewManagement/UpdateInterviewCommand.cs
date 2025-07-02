@@ -95,6 +95,7 @@ public class UpdateInterviewCommandHandler : IRequestHandler<UpdateInterviewComm
         // Retrieve the interview along with its existing InterviewSkills.
         // If the interview does not exist, throw an exception.
         var interview = await _dbContext.Interviews
+            .AsQueryable()
             .Include(i => i.InterviewSkills)
             .FirstOrDefaultAsync(i => i.Id == request.InterviewId, cancellationToken);
 

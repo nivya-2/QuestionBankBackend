@@ -11,16 +11,22 @@ namespace QuestionBank.Application.Behaviors;
 public class ExceptionDetails
 {
     /// <summary>Gets or sets the HTTP status code for the error response.</summary>
+    /// <example>404</example>
     public int StatusCode { get; set; }
 
     /// <summary>Gets or sets a short title describing the type of error.</summary>
+    /// <example>Not Found</example>
     public string Title { get; set; } = "Error";
 
     /// <summary>Gets or sets a detailed message explaining the error.</summary>
+    /// <example>The interview with ID 42 was not found in the database.</example>
     public string Message { get; set; } = "Something went wrong.";
 
+
     /// <summary>Gets or sets the type of the exception (e.g., ArgumentException).</summary>
+    /// <example>KeyNotFoundException</example>
     public string ErrorType { get; set; } = "Exception";
+
 }
 
 /// <summary>
