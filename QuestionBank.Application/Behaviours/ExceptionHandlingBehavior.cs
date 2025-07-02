@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuestionBank.Application.Behaviors;
 
@@ -67,12 +68,17 @@ public class ExceptionHandlingBehavior<TRequest, TResponse> : IPipelineBehavior<
 
             var error = new ExceptionDetails
             {
-                Message = ex.Message,
+                Message = ex switch
+                {
+                    DbUpdateException => "Invalid foreign key or entity reference. Check that all referenced IDs exist.",
+                    _ => ex.Message
+                },
                 ErrorType = ex.GetType().Name,
                 StatusCode = ex switch
                 {
                     KeyNotFoundException => StatusCodes.Status404NotFound,
                     ArgumentException => StatusCodes.Status400BadRequest,
+                    DbUpdateException => StatusCodes.Status400BadRequest, 
                     UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
                     _ => StatusCodes.Status500InternalServerError
                 },
@@ -81,6 +87,7 @@ public class ExceptionHandlingBehavior<TRequest, TResponse> : IPipelineBehavior<
                     KeyNotFoundException => "Not Found",
                     ArgumentException => "Bad Request",
                     UnauthorizedAccessException => "Unauthorized",
+                    DbUpdateException => "Bad Request",
                     _ => "Internal Server Error"
                 }
             };
