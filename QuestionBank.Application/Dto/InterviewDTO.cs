@@ -18,7 +18,7 @@ public class InterviewDto
     /// <summary>
     /// Gets or sets the experience required for the interview.
     /// </summary>
-    public float Experience { get; set; }
+    public decimal Experience { get; set; }
 
     /// <summary>
     /// Gets or sets the list of skill names associated with the interview.

@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using QuestionBank.Application.Behaviors;
 
 namespace QuestionBank.Application;
 
@@ -15,5 +17,6 @@ public static class ApplicationServiceRegistry
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ExceptionHandlingBehavior<,>));
     }
 }
