@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using QuestionBank.Application.Contracts.Persistence;
 using QuestionBank.Application.Dto;
-using QuestionBank.Domain.Entities;
 
 namespace QuestionBank.Application.Features.InterviewManagement;
 
