@@ -34,5 +34,5 @@ public class Interview : BaseDomainEntity2
     /// <summary>
     /// Gets or sets the collection of questions linked to this interview.
     /// </summary>
-    public ICollection<Question> Questions { get; set; } = new List<Question>();
+    public ICollection<InterviewQuestionDetails> Questions { get; set; } = new List<InterviewQuestionDetails>();
 }

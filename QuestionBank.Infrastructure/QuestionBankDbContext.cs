@@ -49,6 +49,6 @@ public class QuestionBankDbContext : DbContext, IQuestionBankDbContext
     public DbSet<Interview> Interviews { get; set; }
     public DbSet<Skill> Skills { get; set; }
     public DbSet<InterviewSkill> InterviewSkills { get; set; }
-    public DbSet<Question> Questions { get; set; }
+    public DbSet<InterviewQuestionDetails> Questions { get; set; }
 
 }

@@ -5,7 +5,7 @@ namespace QuestionBank.Domain.Entities;
 /// <summary>
 /// Represents a question that is part of an interview.
 /// </summary>
-public class Question : BaseDomainEntity
+public class InterviewQuestionDetails : BaseDomainEntity
 {
     /// <summary>
     /// Gets or sets the foreign key referencing the associated interview.
@@ -16,7 +16,7 @@ public class Question : BaseDomainEntity
     /// Gets or sets the text of the interview question.
     /// </summary>
     /// <example>What is EF Core?</example>
-    public string QuestionText { get; set; } = null!;
+    public string Question { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the navigation property for the related interview.

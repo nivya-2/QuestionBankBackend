@@ -81,6 +81,7 @@ public class QuestionBankController : BaseController
     /// <item><description><see cref="StatusCodes.Status404NotFound"/> if the interview or a referenced question does not exist.</description></item>
     /// <item><description><see cref="StatusCodes.Status409Conflict"/> if a database conflict occurs while saving changes.</description></item>
     /// </list>
+    /// </returns>
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]

@@ -8,6 +8,6 @@ public interface IQuestionBankDbContext
     DbSet<Interview> Interviews { get; set; }
     DbSet<Skill> Skills { get; set; }
     DbSet<InterviewSkill> InterviewSkills { get; set; }
-    DbSet<Question> Questions { get; set; }
+    DbSet<InterviewQuestionDetails> Questions { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
