@@ -6,6 +6,7 @@ using QuestionBank.Api.Controllers.Common;
 using QuestionBank.Application.Dto;
 using QuestionBank.Application.Features.InterviewManagement;
 using System.Net;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace QuestionBank.Api.Controllers;
 
@@ -85,8 +86,10 @@ public class QuestionBankController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     [ProducesResponseType((int)HttpStatusCode.Conflict)]
     [HttpPut("interviews/{id:int}/questions")]
-    public async Task<IActionResult> SetQuestions([FromRoute] int id)
+    public async Task<IActionResult> SetQuestions([FromRoute] int id, [FromBody] SetQuestionsCommand command)
     {
+        command.InterviewId = id;
+        await Mediator.Send(command);
         return NoContent();
     }
 }

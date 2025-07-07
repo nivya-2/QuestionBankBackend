@@ -13,11 +13,19 @@ public class SetQuestionsCommand : IRequest<bool>
     /// <summary>
     /// Interview ID to which the questions belong.
     /// </summary>
+    /// <example>12</example>
     public int InterviewId { get; set; }
 
     /// <summary>
     /// List of question details to be processed.
     /// </summary>
+    /// </summary>
+    /// <example>
+    /// [
+    ///   { "id": 0, "questionText": "What is Dependency Injection?", "changeType": "Add" },
+    ///   { "id": 15, "questionText": "", "changeType": "Delete" }
+    /// ]
+    /// </example>
     public List<QuestionUpdateDto> Questions { get; set; } = new();
 }
 

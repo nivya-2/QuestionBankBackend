@@ -17,7 +17,7 @@ public class QuestionUpdateDto
     /// Text of the question.
     /// </summary>
     /// <example>What is dependency injection in .NET?</example>
-    public string QuestionText { get; set; } = null!;
+    public string Question { get; set; }
 
     /// <summary>
     /// Type of change to be applied to the question.
