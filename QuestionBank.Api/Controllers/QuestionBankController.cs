@@ -67,6 +67,19 @@ public class QuestionBankController : BaseController
         return NoContent();
     }
 
+    /// <summary>
+    /// Sets or updates the list of questions associated with a specific interview.
+    /// </summary>
+    /// <param name="id">The ID of the interview whose questions are to be managed.</param>
+    /// <param name="command">An object containing the list of questions to add, update, or delete.</param>
+    /// <returns>
+    /// An <see cref="IActionResult"/> indicating the outcome:
+    /// <list type="bullet">
+    /// <item><description><see cref="StatusCodes.Status204NoContent"/> if the operation completes successfully.</description></item>
+    /// <item><description><see cref="StatusCodes.Status400BadRequest"/> if the request contains invalid input or mismatched IDs.</description></item>
+    /// <item><description><see cref="StatusCodes.Status404NotFound"/> if the interview or a referenced question does not exist.</description></item>
+    /// <item><description><see cref="StatusCodes.Status409Conflict"/> if a database conflict occurs while saving changes.</description></item>
+    /// </list>
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
