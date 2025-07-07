@@ -20,13 +20,13 @@ public class QuestionUpdateDto
     public string Question { get; set; }
 
     /// <summary>
-    /// Type of change to be applied to the question.
+    /// Indicates whether this question should be deleted.
     /// </summary>
     /// <remarks>
-    /// - <c>Add</c>: Question will be created (Id must be 0).  
-    /// - <c>Update</c>: Question with existing Id will be updated.  
-    /// - <c>Delete</c>: Question with existing Id will be removed.  
-    /// - <c>None</c>: No changes will be applied to this question.
+    /// If <c>true</c>, the backend will delete the question with the provided <see cref="Id"/>.
+    /// If <c>false:- </c>
+    ///   -If Id == 0 → add new question.
+    ///   -If Id > 0 → update existing question with new <see cref="QuestionText"/>.
     /// </remarks>
-    public QuestionChangeType ChangeType { get; set; }
+    public bool ShouldDelete { get; set; }
 }
