@@ -17,8 +17,7 @@ public class SetQuestionsCommand : IRequest<bool>
     public int InterviewId { get; set; }
 
     /// <summary>
-    /// List of question details to be processed.
-    /// </summary>
+    /// DTOs representing modifications to <see cref="Question"/> entities.
     /// </summary>
     /// <example>
     /// [
