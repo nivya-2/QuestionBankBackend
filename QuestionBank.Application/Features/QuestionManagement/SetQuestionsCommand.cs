@@ -73,7 +73,8 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
         //          - If Question is non-empty:
         //              - Attempt to find the existing question by Id.
         //              - If not found → throw KeyNotFoundException.
-        //              - Else → update its Question.
+        //              - Else If new text differs from existing → update Question text.
+        //              - Else → skip (no update needed).
         // 5. Save all changes to the database using dbContext.SaveChangesAsync.
         // 6. Return true to indicate the questions were successfully updated.
         #endregion
