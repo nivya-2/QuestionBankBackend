@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Text.Json.Serialization;
+using MediatR;
 using QuestionBank.Application.Contracts.Persistence;
 using QuestionBank.Application.Dto;
 using QuestionBank.Domain.Entities;
@@ -12,6 +13,7 @@ public class SetQuestionsCommand : IRequest<bool>
     /// Interview ID to which the questions belong.
     /// </summary>
     /// <example>12</example>
+    [JsonIgnore]
     public int InterviewId { get; set; }
 
     /// <summary>
