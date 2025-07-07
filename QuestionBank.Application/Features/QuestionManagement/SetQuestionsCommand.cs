@@ -17,7 +17,7 @@ public class SetQuestionsCommand : IRequest<bool>
     public int InterviewId { get; set; }
 
     /// <summary>
-    /// DTOs representing modifications to <see cref="InterviewQuestionDetails"/> entities.
+    /// DTOs representing modifications to <see cref="InterviewQuestionDetail"/> entities.
     /// </summary>
     /// <example>
     /// [
@@ -27,7 +27,7 @@ public class SetQuestionsCommand : IRequest<bool>
     /// ]
     /// </example>
     /// <seealso cref="QuestionUpdateDto"/>
-    /// <seealso cref="InterviewQuestionDetails"/>
+    /// <seealso cref="InterviewQuestionDetail"/>
     public List<QuestionUpdateDto> Questions { get; set; } = new();
 }
 

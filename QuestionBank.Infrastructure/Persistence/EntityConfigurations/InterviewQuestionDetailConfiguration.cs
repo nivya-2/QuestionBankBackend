@@ -7,10 +7,13 @@ namespace QuestionBank.Infrastructure.Persistence.EntityConfigurations;
 /// <summary>
 /// Configures the Question entity, including relationships and seed data.
 /// </summary>
-public class QuestionConfiguration : IEntityTypeConfiguration<InterviewQuestionDetails>
+public class InterviewQuestionDetailConfiguration : IEntityTypeConfiguration<InterviewQuestionDetail>
 {
-    public void Configure(EntityTypeBuilder<InterviewQuestionDetails> builder)
+    public void Configure(EntityTypeBuilder<InterviewQuestionDetail> builder)
     {
+        //Setting the name explicitly after renaming the model
+        builder.ToTable("InterviewQuestionDetails");
+
         // Primary key
         builder.HasKey(q => q.Id);
         builder.Property(q => q.Id).ValueGeneratedOnAdd();
@@ -26,8 +29,8 @@ public class QuestionConfiguration : IEntityTypeConfiguration<InterviewQuestionD
 
         // Seed data 
         builder.HasData(
-            new InterviewQuestionDetails { Id = 1, InterviewId = 1, Question = "Explain DI in C#" },
-            new InterviewQuestionDetails { Id = 2, InterviewId = 1, Question = "What is EF Core?" }
+            new InterviewQuestionDetail { Id = 1, InterviewId = 1, Question = "Explain DI in C#" },
+            new InterviewQuestionDetail { Id = 2, InterviewId = 1, Question = "What is EF Core?" }
         );
     }
 }

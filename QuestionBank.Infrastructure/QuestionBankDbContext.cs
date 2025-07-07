@@ -26,7 +26,7 @@ public class QuestionBankDbContext : DbContext, IQuestionBankDbContext
     {
         // Apply the configurations explicitly
         modelBuilder.ApplyConfiguration(new InterviewConfiguration());
-        modelBuilder.ApplyConfiguration(new QuestionConfiguration());
+        modelBuilder.ApplyConfiguration(new InterviewQuestionDetailConfiguration());
         modelBuilder.ApplyConfiguration(new SkillConfiguration());
         modelBuilder.ApplyConfiguration(new InterviewSkillConfiguration());
     }
@@ -49,6 +49,6 @@ public class QuestionBankDbContext : DbContext, IQuestionBankDbContext
     public DbSet<Interview> Interviews { get; set; }
     public DbSet<Skill> Skills { get; set; }
     public DbSet<InterviewSkill> InterviewSkills { get; set; }
-    public DbSet<InterviewQuestionDetails> Questions { get; set; }
+    public DbSet<InterviewQuestionDetail> Questions { get; set; }
 
 }

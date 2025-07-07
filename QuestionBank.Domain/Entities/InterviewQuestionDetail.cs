@@ -5,7 +5,7 @@ namespace QuestionBank.Domain.Entities;
 /// <summary>
 /// Represents a question that is part of an interview.
 /// </summary>
-public class InterviewQuestionDetails : BaseDomainEntity
+public class InterviewQuestionDetail : BaseDomainEntity
 {
     /// <summary>
     /// Gets or sets the foreign key referencing the associated interview.
