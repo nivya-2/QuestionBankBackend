@@ -64,5 +64,13 @@ public class QuestionBankController : BaseController
         return NoContent();
     }
 
-
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    [ProducesResponseType((int)HttpStatusCode.Conflict)]
+    [HttpPut("interviews/{id:int}/questions")]
+    public async Task<IActionResult> SetQuestions([FromRoute] int id)
+    {
+        return NoContent();
+    }
 }
