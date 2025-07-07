@@ -19,5 +19,6 @@ public static class InfrastructureServiceRegistry
         options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IQuestionBankDbContext>(provider => provider.GetService<QuestionBankDbContext>());
+
     }
 }

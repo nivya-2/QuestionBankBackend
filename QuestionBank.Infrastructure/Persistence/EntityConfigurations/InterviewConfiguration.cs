@@ -20,7 +20,9 @@ public class InterviewConfiguration : IEntityTypeConfiguration<Interview>
         builder.Property(i => i.Role).IsRequired();
         builder.Property(i => i.Status).IsRequired();
 
-        builder.Property(i => i.Experience).HasColumnType("float");
+        builder.Property(i => i.Experience)
+       .HasColumnType("numeric");
+
 
         // Seed data
         builder.HasData( new Interview

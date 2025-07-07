@@ -24,12 +24,12 @@ public class Interview : BaseDomainEntity2
     /// Gets or sets the years of experience required or relevant for the interview.
     /// </summary>
     /// <example>3.5</example>
-    public float? Experience { get; set; }
+    public decimal? Experience { get; set; }
 
     /// <summary>
     /// Gets or sets the collection of skills associated with this interview.
     /// </summary>
-    public ICollection<InterviewSkill> InterviewSkills { get; set; } = new List<InterviewSkill>();
+    public List<InterviewSkill> InterviewSkills { get; set; } = new List<InterviewSkill>();
 
     /// <summary>
     /// Gets or sets the collection of questions linked to this interview.

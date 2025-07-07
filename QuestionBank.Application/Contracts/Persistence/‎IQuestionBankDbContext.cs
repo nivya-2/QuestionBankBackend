@@ -10,6 +10,4 @@ public interface IQuestionBankDbContext
     DbSet<InterviewSkill> InterviewSkills { get; set; }
     DbSet<Question> Questions { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
-
-
 }
