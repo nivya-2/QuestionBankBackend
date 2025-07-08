@@ -12,8 +12,8 @@ using QuestionBank.Infrastructure;
 namespace QuestionBank.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(QuestionBankDbContext))]
-    [Migration("20250707111644_explicitly-renaming-the-previous-questions-table")]
-    partial class explicitlyrenamingthepreviousquestionstable
+    [Migration("20250708044411_QuestionTableRevision")]
+    partial class QuestionTableRevision
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

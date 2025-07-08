@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace QuestionBank.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class explicitlyrenamingthepreviousquestionstable : Migration
+    public partial class QuestionTableRevision : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,7 +68,7 @@ namespace QuestionBank.Infrastructure.Persistence.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     InterviewId = table.Column<int>(type: "integer", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Question = table.Column<string>(type: "text", nullable: false),
+                    QuestionText = table.Column<string>(type: "text", nullable: false),
                     UpdatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -84,7 +84,7 @@ namespace QuestionBank.Infrastructure.Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "Questions",
-                columns: new[] { "Id", "CreatedOn", "InterviewId", "Question", "UpdatedOn" },
+                columns: new[] { "Id", "CreatedOn", "InterviewId", "QuestionText", "UpdatedOn" },
                 values: new object[,]
                 {
                     { 1, null, 1, "Explain DI in C#", null },
