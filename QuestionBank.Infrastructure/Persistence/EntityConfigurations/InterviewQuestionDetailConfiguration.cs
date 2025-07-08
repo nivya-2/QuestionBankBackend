@@ -11,9 +11,6 @@ public class InterviewQuestionDetailConfiguration : IEntityTypeConfiguration<Int
 {
     public void Configure(EntityTypeBuilder<InterviewQuestionDetail> builder)
     {
-        //Setting the name explicitly after renaming the model
-        builder.ToTable("InterviewQuestionDetails");
-
         // Primary key
         builder.HasKey(q => q.Id);
         builder.Property(q => q.Id).ValueGeneratedOnAdd();
