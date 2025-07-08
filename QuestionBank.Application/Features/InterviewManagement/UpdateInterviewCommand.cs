@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using QuestionBank.Shared;
 using static QuestionBank.Shared.QuestionBankEnums;
-using System.Text.Json.Serialization;
 
 /// <summary>
 /// Command to update an existing interview.
@@ -19,7 +18,6 @@ public class UpdateInterviewCommand : IRequest<bool>
     /// The ID of the interview to update.
     /// </summary>
     /// <example>50</example>
-    [JsonIgnore]
     public int InterviewId { get; set; }
 
     /// <summary>

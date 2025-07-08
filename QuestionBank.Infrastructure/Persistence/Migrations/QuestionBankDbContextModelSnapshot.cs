@@ -70,48 +70,6 @@ namespace QuestionBank.Infrastructure.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("QuestionBank.Domain.Entities.InterviewQuestionDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("InterviewId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Question")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InterviewId");
-
-                    b.ToTable("InterviewQuestionDetails", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            InterviewId = 1,
-                            Question = "Explain DI in C#"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            InterviewId = 1,
-                            Question = "What is EF Core?"
-                        });
-                });
-
             modelBuilder.Entity("QuestionBank.Domain.Entities.InterviewSkill", b =>
                 {
                     b.Property<int>("Id")
@@ -155,6 +113,48 @@ namespace QuestionBank.Infrastructure.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("QuestionBank.Domain.Entities.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("InterviewId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("QuestionText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InterviewId");
+
+                    b.ToTable("Questions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            InterviewId = 1,
+                            QuestionText = "Explain DI in C#"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            InterviewId = 1,
+                            QuestionText = "What is EF Core?"
+                        });
+                });
+
             modelBuilder.Entity("QuestionBank.Domain.Entities.Skill", b =>
                 {
                     b.Property<int>("Id")
@@ -195,17 +195,6 @@ namespace QuestionBank.Infrastructure.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("QuestionBank.Domain.Entities.InterviewQuestionDetail", b =>
-                {
-                    b.HasOne("QuestionBank.Domain.Entities.Interview", "Interview")
-                        .WithMany("Questions")
-                        .HasForeignKey("InterviewId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Interview");
-                });
-
             modelBuilder.Entity("QuestionBank.Domain.Entities.InterviewSkill", b =>
                 {
                     b.HasOne("QuestionBank.Domain.Entities.Interview", "Interview")
@@ -223,6 +212,17 @@ namespace QuestionBank.Infrastructure.Persistence.Migrations
                     b.Navigation("Interview");
 
                     b.Navigation("Skill");
+                });
+
+            modelBuilder.Entity("QuestionBank.Domain.Entities.Question", b =>
+                {
+                    b.HasOne("QuestionBank.Domain.Entities.Interview", "Interview")
+                        .WithMany("Questions")
+                        .HasForeignKey("InterviewId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Interview");
                 });
 
             modelBuilder.Entity("QuestionBank.Domain.Entities.Interview", b =>
