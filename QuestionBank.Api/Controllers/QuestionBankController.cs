@@ -6,6 +6,7 @@ using QuestionBank.Api.Controllers.Common;
 using QuestionBank.Application.Dto;
 using QuestionBank.Application.Features.InterviewManagement;
 using System.Net;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace QuestionBank.Api.Controllers;
 
@@ -61,6 +62,32 @@ public class QuestionBankController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> UpdateInterview([FromRoute] int id, [FromBody] UpdateInterviewCommand command)
+    {
+        command.InterviewId = id;
+        await Mediator.Send(command);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Sets or updates the list of questions associated with a specific interview.
+    /// </summary>
+    /// <param name="id">The ID of the interview whose questions are to be managed.</param>
+    /// <param name="command">An object containing the list of questions to add, update, or delete.</param>
+    /// <returns>
+    /// An <see cref="IActionResult"/> indicating the outcome:
+    /// <list type="bullet">
+    /// <item><description><see cref="StatusCodes.Status204NoContent"/> if the operation completes successfully.</description></item>
+    /// <item><description><see cref="StatusCodes.Status400BadRequest"/> if the request contains invalid input or mismatched IDs.</description></item>
+    /// <item><description><see cref="StatusCodes.Status404NotFound"/> if the interview or a referenced question does not exist.</description></item>
+    /// <item><description><see cref="StatusCodes.Status409Conflict"/> if a database conflict occurs while saving changes.</description></item>
+    /// </list>
+    /// </returns>
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    [ProducesResponseType((int)HttpStatusCode.Conflict)]
+    [HttpPut("interviews/{id:int}/questions")]
+    public async Task<IActionResult> SetQuestions([FromRoute] int id, [FromBody] SetQuestionsCommand command)
     {
         command.InterviewId = id;
         await Mediator.Send(command);
