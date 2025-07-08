@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace QuestionBank.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class questionstablerevised : Migration
+    public partial class QuestionTableRevision : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
