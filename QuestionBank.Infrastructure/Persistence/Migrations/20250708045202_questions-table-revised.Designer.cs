@@ -12,8 +12,8 @@ using QuestionBank.Infrastructure;
 namespace QuestionBank.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(QuestionBankDbContext))]
-    [Migration("20250708044411_QuestionTableRevision")]
-    partial class QuestionTableRevision
+    [Migration("20250708045202_questions-table-revised")]
+    partial class questionstablerevised
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
