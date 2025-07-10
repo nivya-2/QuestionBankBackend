@@ -89,11 +89,11 @@ public class GetInterviewByIdQueryHandlerTests
         var handler = new GetInterviewByIdQueryHandler(mockDbContext.Object);
         var query = new GetInterviewByIdQuery { InterviewId = 999 };
 
-        // Act
-        var act = async () => await handler.Handle(query, CancellationToken.None);
+        // Act & Assert
+        var exception = await Assert.ThrowsAnyAsync<KeyNotFoundException>(
+            async () => await handler.Handle(query, CancellationToken.None));
 
-        // Assert
-        await act.Should().ThrowAsync<KeyNotFoundException>()
-            .WithMessage("Interview with ID 999 not found.");
+        // Message Assert
+        Assert.Equal("Interview with ID 999 not found.", exception.Message);
     }
 }
