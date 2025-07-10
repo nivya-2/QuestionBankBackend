@@ -109,11 +109,11 @@ public class UpdateInterviewCommandHandlerTests
         };
 
         // Act
-        var act = async () => await handler.Handle(command, CancellationToken.None);
+        var exception = await Assert.ThrowsAsync<KeyNotFoundException>(() =>
+            handler.Handle(command, CancellationToken.None));
 
         // Assert
-        await act.Should().ThrowAsync<KeyNotFoundException>()
-            .WithMessage("Interview with ID 99 not found.");
+        Assert.Equal("Interview with ID 99 not found.", exception.Message);
     }
 
     /// <summary>
@@ -134,10 +134,10 @@ public class UpdateInterviewCommandHandlerTests
         };
 
         // Act
-        var act = async () => await handler.Handle(command, CancellationToken.None);
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+            handler.Handle(command, CancellationToken.None));
 
         // Assert
-        await act.Should().ThrowAsync<ArgumentException>()
-            .WithMessage("Invalid interview status value.");
+        Assert.Equal("Invalid interview status value.", exception.Message);
     }
 }
