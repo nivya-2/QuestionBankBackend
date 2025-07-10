@@ -1,14 +1,9 @@
-﻿using MediatR;
+﻿using System.Text.Json.Serialization;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using QuestionBank.Application.Contracts.Persistence;
-using QuestionBank.Application.Dto;
 using QuestionBank.Domain.Entities;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using QuestionBank.Shared;
 using static QuestionBank.Shared.QuestionBankEnums;
-using System.Text.Json.Serialization;
 
 /// <summary>
 /// Command to update an existing interview.
