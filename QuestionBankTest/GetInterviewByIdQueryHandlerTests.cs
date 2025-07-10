@@ -12,7 +12,7 @@ namespace QuestionBankTest;
 /// <summary>
 /// Unit test class for <see cref="GetInterviewByIdQueryHandler"/>.
 /// Validates the handler's ability to fetch a specific interview by ID
-/// and map it to a DTO with proper skill names.
+/// and map it to <see cref="InterviewDto">
 /// </summary>
 public class GetInterviewByIdQueryHandlerTests
 {
