@@ -1,8 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using QuestionBank.Application.Contracts.Persistence;
 using QuestionBank.Application.Dto;
 using QuestionBank.Domain.Entities;
+
+namespace QuestionBank.Application.Features.QuestionManagement;
 
 /// <summary>
 /// Command to set the questions for a specific interview.
@@ -80,6 +83,66 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
         // 5. Save all changes to the database using dbContext.SaveChangesAsync.
         // 6. Return true to indicate the questions were successfully updated.
         #endregion
+        var interview = await _dbContext.Interviews
+    .Include(i => i.Questions)
+    .FirstOrDefaultAsync(i => i.Id == request.InterviewId, cancellationToken);
+
+        if (interview is null)
+            throw new KeyNotFoundException($"Interview with ID {request.InterviewId} not found.");
+
+        var existingQuestionsDict = interview.Questions.ToDictionary(q => q.Id);
+
+        var newQuestions = request.Questions
+            .Where(q => q.Id == 0)
+            .ToList();
+
+        var deletions = request.Questions
+            .Where(q => q.Id > 0 && string.IsNullOrWhiteSpace(q.Question))
+            .ToList();
+
+        var updates = request.Questions
+            .Where(q => q.Id > 0 && !string.IsNullOrWhiteSpace(q.Question))
+            .ToList();
+
+        // Validate new questions
+        if (newQuestions.Any(q => string.IsNullOrWhiteSpace(q.Question)))
+            throw new ArgumentException("Cannot insert a new question with empty text.");
+
+        // Validate deletions and updates reference valid existing questions
+        var invalidIds = deletions.Concat(updates)
+            .Where(q => !existingQuestionsDict.ContainsKey(q.Id))
+            .Select(q => q.Id)
+            .ToList();
+
+        if (invalidIds.Any())
+            throw new KeyNotFoundException($"Some question IDs not found: {string.Join(", ", invalidIds)}");
+
+        // Add new questions
+        var entitiesToAdd = newQuestions.Select(q => new InterviewQuestionDetail
+        {
+            InterviewId = request.InterviewId,
+            Question = q.Question!.Trim()
+        }).ToList();
+
+        _dbContext.InterviewQuestionDetails.AddRange(entitiesToAdd);
+
+        // Remove deleted questions
+        var entitiesToDelete = deletions.Select(q => existingQuestionsDict[q.Id]).ToList();
+        _dbContext.InterviewQuestionDetails.RemoveRange(entitiesToDelete);
+
+        // Update changed questions
+        foreach (var update in updates)
+        {
+            var entity = existingQuestionsDict[update.Id];
+            var newText = update.Question!.Trim();
+            if (entity.Question != newText)
+            {
+                entity.Question = newText;
+                _dbContext.InterviewQuestionDetails.Update(entity);
+            }
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
 }
