@@ -10,6 +10,8 @@ using QuestionBank.Shared;
 using static QuestionBank.Shared.QuestionBankEnums;
 using System.Text.Json.Serialization;
 
+namespace QuestionBank.Application.Features.InterviewManagement;
+
 /// <summary>
 /// Command to update an existing interview.
 /// </summary>
