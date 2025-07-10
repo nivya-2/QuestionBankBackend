@@ -5,6 +5,8 @@ using QuestionBank.Application.Contracts.Persistence;
 using QuestionBank.Domain.Entities;
 using static QuestionBank.Shared.QuestionBankEnums;
 
+namespace QuestionBank.Application.Features.InterviewManagement;
+
 /// <summary>
 /// Command to update an existing interview.
 /// </summary>
