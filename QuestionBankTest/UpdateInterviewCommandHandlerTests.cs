@@ -128,7 +128,7 @@ public class UpdateInterviewCommandHandlerTests
         {
             InterviewId = 1,
             Role = "Role",
-            InterviewStatus = (InterviewStatus)999, // Invalid enum
+            InterviewStatus = (InterviewStatus)999,
             Experience = 3,
             SkillIds = new List<int> { 1 }
         };
