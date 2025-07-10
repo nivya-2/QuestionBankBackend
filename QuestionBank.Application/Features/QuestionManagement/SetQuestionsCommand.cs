@@ -95,11 +95,9 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
         var newQuestions = request.Questions
             .Where(q => q.Id == 0)
             .ToList();
-
         var deletions = request.Questions
             .Where(q => q.Id > 0 && string.IsNullOrWhiteSpace(q.Question))
             .ToList();
-
         var updates = request.Questions
             .Where(q => q.Id > 0 && !string.IsNullOrWhiteSpace(q.Question))
             .ToList();
@@ -113,7 +111,6 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
             .Where(q => !existingQuestionsDict.ContainsKey(q.Id))
             .Select(q => q.Id)
             .ToList();
-
         if (invalidIds.Any())
             throw new KeyNotFoundException($"Some question IDs not found: {string.Join(", ", invalidIds)}");
 
@@ -123,7 +120,6 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
             InterviewId = request.InterviewId,
             Question = q.Question!.Trim()
         }).ToList();
-
         _dbContext.InterviewQuestionDetails.AddRange(entitiesToAdd);
 
         // Remove deleted questions
@@ -141,7 +137,6 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
                 _dbContext.InterviewQuestionDetails.Update(entity);
             }
         }
-
         await _dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
