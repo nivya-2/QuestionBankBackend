@@ -145,8 +145,8 @@ public class SetQuestionsCommandHandlerTests
             InterviewId = 1,
             Questions = new List<QuestionUpdateDto>
             {
-                new() { Id = 99, Question = "" },                      // Invalid delete
-                new() { Id = 88, Question = "Updated Question" }       // Invalid update
+                new() { Id = 99, Question = "" },                      
+                new() { Id = 88, Question = "Updated Question" }       
             }
         };
 
