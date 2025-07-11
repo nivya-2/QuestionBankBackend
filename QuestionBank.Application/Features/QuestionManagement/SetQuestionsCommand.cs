@@ -84,8 +84,9 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
         // 6. Return true to indicate the questions were successfully updated.
         #endregion
         var interview = await _dbContext.Interviews
-    .Include(i => i.Questions)
-    .FirstOrDefaultAsync(i => i.Id == request.InterviewId, cancellationToken);
+                        .AsQueryable()
+                        .Include(i => i.Questions)
+                        .FirstOrDefaultAsync(i => i.Id == request.InterviewId, cancellationToken);
 
         if (interview is null)
             throw new KeyNotFoundException($"Interview with ID {request.InterviewId} not found.");
