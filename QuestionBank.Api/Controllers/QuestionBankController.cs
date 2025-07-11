@@ -7,6 +7,7 @@ using QuestionBank.Application.Dto;
 using QuestionBank.Application.Features.InterviewManagement;
 using System.Net;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using QuestionBank.Application.Features.QuestionManagement;
 
 namespace QuestionBank.Api.Controllers;
 
@@ -92,5 +93,23 @@ public class QuestionBankController : BaseController
         command.InterviewId = id;
         await Mediator.Send(command);
         return NoContent();
+    }
+
+    /// <summary>
+    /// Retrieves all questions associated with a specific interview.
+    /// </summary>
+    /// <param name="id">The ID of the interview whose questions are to be fetched.</param>
+    /// <returns>
+    /// A list of <see cref="QuestionUpdateDto"/> representing the interview's questions.
+    /// </returns>
+    /// <response code="200">Returns the list of questions (empty if none exist).</response>
+    /// <response code="404">Returned when the specified interview does not exist.</response>
+    [ProducesResponseType(typeof(List<QuestionUpdateDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [HttpGet("interviews/{id:int}/questions")]
+    public async Task<ActionResult<List<QuestionUpdateDto>>> GetQuestions([FromRoute] int id)
+    {
+        var questions = await Mediator.Send(new GetQuestionsQuery(id));
+        return Ok(questions);
     }
 }
