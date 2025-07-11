@@ -66,9 +66,9 @@ public class SetQuestionsCommandHandlerTests
             InterviewId = 1,
             Questions = new List<QuestionUpdateDto>
             {
-                new() { Id = 0, Question = "New Question 1" },         
-                new() { Id = 2, Question = "Updated Question 2" },    
-                new() { Id = 1, Question = "" }                       
+                new() { Id = 0, Question = "New Question 1" },
+                new() { Id = 2, Question = "Updated Question 2" },
+                new() { Id = 1, Question = "" }
             }
         };
 
@@ -145,8 +145,8 @@ public class SetQuestionsCommandHandlerTests
             InterviewId = 1,
             Questions = new List<QuestionUpdateDto>
             {
-                new() { Id = 99, Question = "" },                      
-                new() { Id = 88, Question = "Updated Question" }       
+                new() { Id = 99, Question = "" },
+                new() { Id = 88, Question = "Updated Question" }
             }
         };
 
