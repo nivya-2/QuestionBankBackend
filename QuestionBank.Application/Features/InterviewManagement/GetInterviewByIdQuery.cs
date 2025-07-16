@@ -63,7 +63,7 @@ public class GetInterviewByIdQueryHandler : IRequestHandler<GetInterviewByIdQuer
             {
                 Role = i.Role,
                 InterviewStatus = i.Status.ToString(),
-                Experience = i.Experience ?? 0m,
+                Experience = i.Experience,
                 CreatedBy = i.CreatedBy,
                 InterviewSkills = i.InterviewSkills
                                     .Select(skill => skill.Skill.Name)
