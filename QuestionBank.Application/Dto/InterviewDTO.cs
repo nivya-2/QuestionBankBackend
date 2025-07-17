@@ -18,7 +18,7 @@ public class InterviewDto
     /// <summary>
     /// Gets or sets the experience required for the interview.
     /// </summary>
-    public decimal Experience { get; set; }
+    public decimal? Experience { get; set; }
 
     /// <summary>
     /// Gets or sets the username or identifier of the user who created the interview.
