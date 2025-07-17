@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using QuestionBank.Application.Dto;
 
 namespace QuestionBank.Application.Features.QuestionManagement;
 
@@ -37,9 +38,32 @@ public class SetQuestionsCommandValidator : AbstractValidator<SetQuestionsComman
             });
         });
 
+        //Ensure that the request has distinct questions
+        RuleFor(cmd => cmd.Questions)
+            .Must(HaveNoDuplicateQuestions)
+            .WithMessage(cmd =>
+            {
+                var dups = cmd.Questions
+                    .Where(q => !string.IsNullOrWhiteSpace(q.Question))
+                    .Select(q => q.Question!.Trim().ToLowerInvariant())
+                    .GroupBy(q => q)
+                    .Where(g => g.Count() > 1)
+                    .Select(g => $"'{g.Key}'")
+                    .ToList();
+                return $"Duplicate questions in request: {string.Join(", ", dups)}";
+            });
+
         // Ensure InterviewId is greater than 0
         RuleFor(x => x.InterviewId)
             .GreaterThan(0)
             .WithMessage("InterviewId must be greater than zero.");
+    }
+    private bool HaveNoDuplicateQuestions(List<QuestionUpdateDto> questions)
+    {
+        var normalized = questions
+            .Where(q => !string.IsNullOrWhiteSpace(q.Question))
+            .Select(q => q.Question!.Trim().ToLowerInvariant());
+
+        return normalized.GroupBy(q => q).All(g => g.Count() == 1);
     }
 }

@@ -103,10 +103,6 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
             .Where(q => q.Id > 0 && !string.IsNullOrWhiteSpace(q.Question))
             .ToList();
 
-        // Validate new questions
-        if (newQuestions.Any(q => string.IsNullOrWhiteSpace(q.Question)))
-            throw new ArgumentException("Cannot insert a new question with empty text.");
-
         // Validate deletions and updates reference valid existing questions
         var invalidIds = deletions.Concat(updates)
             .Where(q => !existingQuestionsDict.ContainsKey(q.Id))
@@ -114,6 +110,25 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
             .ToList();
         if (invalidIds.Any())
             throw new KeyNotFoundException($"Some question IDs not found: {string.Join(", ", invalidIds)}");
+
+        // Normalize and collect new + updated questions for duplication check
+        var newOrUpdatedQuestions = newQuestions
+            .Concat(updates)
+            .Select(q => q.Question!.Trim().ToLowerInvariant())
+            .ToList();
+
+        //Get Existing questions under the interview in a normalised format
+        var existingQuestionsForInterview = interview.Questions
+        .Select(q => q.Question.Trim().ToLowerInvariant()).ToHashSet();
+
+        //Check for duplicate between questions in request and questions in DB
+        var duplicate = newOrUpdatedQuestions
+                        .FirstOrDefault(text => existingQuestionsForInterview
+                        .Contains(text));
+
+        if (duplicate is not null)
+            throw new InvalidOperationException($"Duplicate question for this interview: '{duplicate}'");
+
 
         // Add new questions
         var entitiesToAdd = newQuestions.Select(q => new InterviewQuestionDetail
