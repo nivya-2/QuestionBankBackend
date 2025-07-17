@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using System.Text;
@@ -69,6 +70,7 @@ public class ExceptionHandlingBehavior<TRequest, TResponse> : IPipelineBehavior<
                 Message = ex switch
                 {
                     DbUpdateException => "Invalid foreign key or entity reference. Check that all referenced IDs exist.",
+                    ValidationException validationEx => string.Join(" | ", validationEx.Errors.Select(e => e.ErrorMessage)),
                     _ => ex.Message
                 },
                 ErrorType = ex.GetType().Name,
@@ -78,12 +80,14 @@ public class ExceptionHandlingBehavior<TRequest, TResponse> : IPipelineBehavior<
                     ArgumentException => StatusCodes.Status400BadRequest,
                     DbUpdateException => StatusCodes.Status400BadRequest, 
                     UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+                    ValidationException => StatusCodes.Status400BadRequest,
                     _ => StatusCodes.Status500InternalServerError
                 },
                 Title = ex switch
                 {
                     KeyNotFoundException => "Not Found",
                     ArgumentException => "Bad Request",
+                    ValidationException => "Validation Failed",
                     UnauthorizedAccessException => "Unauthorized",
                     DbUpdateException => "Bad Request",
                     _ => "Internal Server Error"
