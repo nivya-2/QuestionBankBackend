@@ -41,7 +41,6 @@ public class UpdateInterviewCommandValidatorTests
             SkillIds = new List<int> { 1, 2, 3 }
         };
 
-
         // Act
         var result = _validator.Validate(command);
 
