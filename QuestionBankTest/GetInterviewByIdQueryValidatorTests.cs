@@ -10,7 +10,7 @@ namespace QuestionBankTest;
 public class GetInterviewByIdQueryValidatorTests
 {
     /// <summary>
-    /// Validates that the query passes when a positive interview ID is provided.
+    /// Verifies that the query passes when a positive interview ID is provided.
     /// </summary>
     [Fact]
     public void GetInterviewByIdQuery_WhenIdIsValid_ShouldPassValidation()
@@ -27,7 +27,7 @@ public class GetInterviewByIdQueryValidatorTests
     }
 
     /// <summary>
-    /// Validates that the query fails when the interview ID is zero.
+    /// Verifies that the query fails when the interview ID is zero.
     /// </summary>
     [Fact]
     public void GetInterviewByIdQuery_WhenIdIsZero_ShouldFailValidation()
@@ -45,7 +45,7 @@ public class GetInterviewByIdQueryValidatorTests
     }
 
     /// <summary>
-    /// Validates that the query fails when the interview ID is negative.
+    /// Verifies that the query fails when the interview ID is negative.
     /// </summary>
     [Fact]
     public void GetInterviewByIdQuery_WhenIdIsNegative_ShouldFailValidation()
