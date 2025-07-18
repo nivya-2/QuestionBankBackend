@@ -7,7 +7,7 @@ namespace QuestionBank.Application.Features.QuestionManagement;
 /// <summary>
 /// Query to retrieve all questions associated with a specific interview.
 /// </summary>
-public class GetQuestionsQuery : IRequest<List<QuestionUpdateDto>>
+public class GetQuestionsForInterviewQuery : IRequest<List<QuestionUpdateDto>>
 {
     /// <summary>
     /// Interview ID for which questions are to be fetched.
@@ -18,7 +18,7 @@ public class GetQuestionsQuery : IRequest<List<QuestionUpdateDto>>
     /// <summary>
     /// Assigns the InterviewId for the query
     /// </summary>>
-    public GetQuestionsQuery(int interviewId)
+    public GetQuestionsForInterviewQuery(int interviewId)
     {
         InterviewId = interviewId;
     }
@@ -26,7 +26,7 @@ public class GetQuestionsQuery : IRequest<List<QuestionUpdateDto>>
 /// <summary>
 /// Handles <see cref="GetQuestionsQuery"/> to fetch all questions for a specific interview
 /// </summary>
-public class GetQuestionsQueryHandler : IRequestHandler<GetQuestionsQuery, List<QuestionUpdateDto>>
+public class GetQuestionsForInterviewQueryHandler : IRequestHandler<GetQuestionsForInterviewQuery, List<QuestionUpdateDto>>
 {
     /// <summary>
     /// EF Core database context for accessing questions in DB.
@@ -37,7 +37,7 @@ public class GetQuestionsQueryHandler : IRequestHandler<GetQuestionsQuery, List<
     /// Initializes a new instance of <see cref="GetQuestionsQueryHandler"/>.
     /// </summary>
     /// <param name="dbContext">Database context used to access and query interview entities.</param>
-    public GetQuestionsQueryHandler(IQuestionBankDbContext dbContext)
+    public GetQuestionsForInterviewQueryHandler(IQuestionBankDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -48,7 +48,7 @@ public class GetQuestionsQueryHandler : IRequestHandler<GetQuestionsQuery, List<
     /// <param name="request">Query containing the InterviewId to fetch questions for.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>List of <see cref="QuestionUpdateDto"/> representing existing questions.</returns>
-    public async Task<List<QuestionUpdateDto>> Handle(GetQuestionsQuery request, CancellationToken cancellationToken)
+    public async Task<List<QuestionUpdateDto>> Handle(GetQuestionsForInterviewQuery request, CancellationToken cancellationToken)
     {
         #region LLD: GetQuestionsForInterview
         // Requires: dbContext, InterviewId passed via GetQuestionsQuery
