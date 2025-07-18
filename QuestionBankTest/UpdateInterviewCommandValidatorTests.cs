@@ -2,7 +2,7 @@
 using QuestionBank.Application.Features.InterviewManagement;
 using static QuestionBank.Shared.QuestionBankEnums;
 
-namespace QuestionBank.Application.UnitTests.Features.InterviewManagement.Validators;
+namespace QuestionBankTest.Features.InterviewManagement.Validators;
 
 /// <summary>
 /// Unit tests for <see cref="UpdateInterviewCommandValidator"/>.

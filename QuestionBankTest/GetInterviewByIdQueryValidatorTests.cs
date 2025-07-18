@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using QuestionBank.Application.Features.InterviewManagement;
 
-namespace QuestionBankTest;
+namespace QuestionBankTest.Features.InterviewManagement.Validators;
 
 /// <summary>
 /// Unit test class for <see cref="GetInterviewByIdQueryValidator"/>.

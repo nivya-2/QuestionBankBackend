@@ -6,7 +6,7 @@ using QuestionBank.Application.Dto;
 using QuestionBank.Application.Features.QuestionManagement;
 using QuestionBank.Domain.Entities;
 
-namespace QuestionBankTest;
+namespace QuestionBankTest.Features.QuestionManagement;
 
 /// <summary>
 /// Unit test class for <see cref="SetQuestionsCommandHandler"/>.
