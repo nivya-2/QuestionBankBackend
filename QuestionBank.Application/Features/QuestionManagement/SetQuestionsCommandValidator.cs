@@ -58,6 +58,15 @@ public class SetQuestionsCommandValidator : AbstractValidator<SetQuestionsComman
             .GreaterThan(0)
             .WithMessage("InterviewId must be greater than zero.");
     }
+
+    /// <summary>
+    /// Checks whether the provided list of <see cref="QuestionUpdateDto"/> contains duplicate questions.
+    /// </summary>
+    /// <param name="questions">The list of questions to validate.</param>
+    /// <returns>
+    /// <c>true</c> if the list contains no duplicate questions (ignoring case and whitespace); 
+    /// otherwise, <c>false</c>.
+    /// </returns>
     private bool HaveNoDuplicateQuestions(List<QuestionUpdateDto> questions)
     {
         var normalized = questions
