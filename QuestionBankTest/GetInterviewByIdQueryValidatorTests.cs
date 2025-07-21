@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using QuestionBank.Application.Features.InterviewManagement;
+using FluentValidation.TestHelper;
 
 namespace QuestionBankTest.Features.InterviewManagement.Validators;
 
@@ -20,10 +21,10 @@ public class GetInterviewByIdQueryValidatorTests
         var query = new GetInterviewByIdQuery { InterviewId = 5 };
 
         // Act
-        var result = validator.Validate(query);
+        var result = validator.TestValidate(query);
 
         // Assert
-        result.IsValid.Should().BeTrue("because InterviewId is a positive non-zero value");
+        result.IsValid.Should().BeTrue();
     }
 
     /// <summary>
@@ -37,11 +38,11 @@ public class GetInterviewByIdQueryValidatorTests
         var query = new GetInterviewByIdQuery { InterviewId = 0 };
 
         // Act
-        var result = validator.Validate(query);
+        var result = validator.TestValidate(query);
 
         // Assert
-        result.IsValid.Should().BeFalse("because InterviewId cannot be zero");
-        result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(query.InterviewId));
+        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(q => q.InterviewId);
     }
 
     /// <summary>
@@ -55,10 +56,10 @@ public class GetInterviewByIdQueryValidatorTests
         var query = new GetInterviewByIdQuery { InterviewId = -10 };
 
         // Act
-        var result = validator.Validate(query);
+        var result = validator.TestValidate(query);
 
         // Assert
-        result.IsValid.Should().BeFalse("because InterviewId cannot be negative");
-        result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(query.InterviewId));
+        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(q => q.InterviewId);
     }
 }

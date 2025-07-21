@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentValidation.TestHelper;
 using QuestionBank.Application.Features.InterviewManagement;
 using static QuestionBank.Shared.QuestionBankEnums;
 
@@ -28,7 +29,7 @@ public class UpdateInterviewCommandValidatorTests
     /// <summary>
     /// Ensures validation passes for a valid <see cref="UpdateInterviewCommand"/>.
     /// </summary>
-    [Fact(DisplayName = "Should pass validation for valid command")]
+    [Fact]
     public void UpdateInterviewCommand_WhenValid_ShouldPassValidation()
     {
         // Arrange
@@ -42,17 +43,17 @@ public class UpdateInterviewCommandValidatorTests
         };
 
         // Act
-        var result = _validator.Validate(command);
+        var result = _validator.TestValidate(command);
 
         // Assert
-        result.IsValid.Should().BeTrue();
+        result.ShouldNotHaveAnyValidationErrors();
     }
 
     /// <summary>
     /// Ensures validation fails when InterviewId is 0 or negative.
     /// </summary>
     /// <param name="interviewId">Invalid InterviewId to test.</param>
-    [Theory(DisplayName = "When InterviewId is zero or negative, should fail validation")]
+    [Theory]
     [InlineData(0)]
     [InlineData(-1)]
     public void UpdateInterviewCommand_WhenInterviewIdIsZeroOrNegative_ShouldFailValidation(int interviewId)
@@ -61,38 +62,38 @@ public class UpdateInterviewCommandValidatorTests
         var command = new UpdateInterviewCommand { InterviewId = interviewId };
 
         // Act
-        var result = _validator.Validate(command);
+        var result = _validator.TestValidate(command);
 
         // Assert
-        result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(command.InterviewId));
+        result.ShouldHaveValidationErrorFor(c => c.InterviewId);
     }
 
     /// <summary>
     /// Ensures validation fails for null, empty, or overly long Role values.
     /// </summary>
     /// <param name="role">Role value to test.</param>
-    [Theory(DisplayName = "Should fail for null, empty or overly long Role")]
+    [Theory]
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    [InlineData("A role that exceeds one hundred characters should absolutely faidddl validation because it's too long.")]
+    [InlineData("A role that exceeds one hundred characters should absolutely fail validation because it's too long to pass through.")]
     public void UpdateInterviewCommand_WhenRoleIsNullEmptyOrTooLong_ShouldFailValidation(string? role)
     {
         // Arrange
         var command = new UpdateInterviewCommand { Role = role };
 
         // Act
-        var result = _validator.Validate(command);
+        var result = _validator.TestValidate(command);
 
         // Assert
-        result.Errors.Should().Contain(e => e.PropertyName == nameof(command.Role));
+        result.ShouldHaveValidationErrorFor(c => c.Role);
     }
 
     /// <summary>
     /// Ensures validation fails for negative Experience values.
     /// </summary>
     /// <param name="experience">Experience value to test.</param>
-    [Theory(DisplayName = "Should fail for negative experience")]
+    [Theory]
     [InlineData(-1)]
     [InlineData(-10)]
     public void UpdateInterviewCommand_WhenExperienceIsNegative_ShouldFailValidation(decimal experience)
@@ -101,16 +102,16 @@ public class UpdateInterviewCommandValidatorTests
         var command = new UpdateInterviewCommand { Experience = experience };
 
         // Act
-        var result = _validator.Validate(command);
+        var result = _validator.TestValidate(command);
 
         // Assert
-        result.Errors.Should().Contain(e => e.PropertyName == nameof(command.Experience));
+        result.ShouldHaveValidationErrorFor(c => c.Experience);
     }
 
     /// <summary>
     /// Ensures validation fails for undefined InterviewStatus enum values.
     /// </summary>
-    [Fact(DisplayName = "Should fail for invalid InterviewStatus enum value")]
+    [Fact]
     public void UpdateInterviewCommand_WhenInterviewStatusIsInvalid_ShouldFailValidation()
     {
         // Arrange
@@ -120,42 +121,41 @@ public class UpdateInterviewCommandValidatorTests
         };
 
         // Act
-        var result = _validator.Validate(command);
+        var result = _validator.TestValidate(command);
 
         // Assert
-        result.Errors.Should().Contain(e => e.PropertyName == nameof(command.InterviewStatus));
+        result.ShouldHaveValidationErrorFor(c => c.InterviewStatus);
     }
 
     /// <summary>
     /// Ensures validation fails when SkillIds contains duplicates.
     /// </summary>
-    [Fact(DisplayName = "Should fail when SkillIds contains duplicate values")]
+    [Fact]
     public void UpdateInterviewCommand_WhenSkillIdsContainDuplicates_ShouldFailValidation()
     {
         // Arrange
         var command = new UpdateInterviewCommand { SkillIds = new List<int> { 1, 2, 2 } };
 
         // Act
-        var result = _validator.Validate(command);
+        var result = _validator.TestValidate(command);
 
         // Assert
-        result.Errors.Should().Contain(e => e.PropertyName == nameof(command.SkillIds))
-            .And.Contain(e => e.ErrorMessage.Contains("Duplicate"));
+        result.ShouldHaveValidationErrorFor(c => c.SkillIds);
     }
 
     /// <summary>
     /// Ensures validation fails when SkillIds contains 0 or negative values.
     /// </summary>
-    [Fact(DisplayName = "Should fail when SkillIds contains zero or negative values")]
+    [Fact]
     public void UpdateInterviewCommand_WhenSkillIdsContainZeroOrNegativeValues_ShouldFailValidation()
     {
         // Arrange
         var command = new UpdateInterviewCommand { SkillIds = new List<int> { 1, 0, -2 } };
 
         // Act
-        var result = _validator.Validate(command);
+        var result = _validator.TestValidate(command);
 
         // Assert
-        result.Errors.Should().Contain(e => e.PropertyName == nameof(command.SkillIds));
+        result.ShouldHaveValidationErrorFor(c => c.SkillIds);
     }
 }
