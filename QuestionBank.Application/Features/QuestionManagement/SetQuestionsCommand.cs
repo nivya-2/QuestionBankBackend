@@ -129,7 +129,6 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
         if (duplicate is not null)
             throw new InvalidOperationException($"Duplicate question for this interview: '{duplicate}'");
 
-
         // Add new questions
         var entitiesToAdd = newQuestions.Select(q => new InterviewQuestionDetail
         {
