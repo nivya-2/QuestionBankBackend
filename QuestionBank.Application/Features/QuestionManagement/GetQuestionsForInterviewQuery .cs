@@ -14,17 +14,10 @@ public class GetQuestionsForInterviewQuery : IRequest<List<QuestionUpdateDto>>
     /// </summary>
     /// <example>12</example>
     public int InterviewId { get; set; }
-
-    /// <summary>
-    /// Assigns the InterviewId for the query
-    /// </summary>>
-    public GetQuestionsForInterviewQuery(int interviewId)
-    {
-        InterviewId = interviewId;
-    }
 }
+
 /// <summary>
-/// Handles <see cref="GetQuestionsQuery"/> to fetch all questions for a specific interview
+/// Handles <see cref="GetQuestionsForInterviewQuery"/> to fetch all questions for a specific interview
 /// </summary>
 public class GetQuestionsForInterviewQueryHandler : IRequestHandler<GetQuestionsForInterviewQuery, List<QuestionUpdateDto>>
 {
@@ -34,7 +27,7 @@ public class GetQuestionsForInterviewQueryHandler : IRequestHandler<GetQuestions
     private readonly IQuestionBankDbContext _dbContext;
 
     /// <summary>
-    /// Initializes a new instance of <see cref="GetQuestionsQueryHandler"/>.
+    /// Initializes a new instance of <see cref="GetQuestionsForInterviewQueryHandler"/>.
     /// </summary>
     /// <param name="dbContext">Database context used to access and query interview entities.</param>
     public GetQuestionsForInterviewQueryHandler(IQuestionBankDbContext dbContext)
@@ -43,7 +36,7 @@ public class GetQuestionsForInterviewQueryHandler : IRequestHandler<GetQuestions
     }
 
     /// <summary>
-    /// Handles the <see cref="GetQuestionsQuery"/> to retrieve all questions for a given interview.
+    /// Handles the <see cref="GetQuestionsForInterviewQuery"/> to retrieve all questions for a given interview.
     /// </summary>
     /// <param name="request">Query containing the InterviewId to fetch questions for.</param>
     /// <param name="cancellationToken">Cancellation token.</param>

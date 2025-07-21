@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using QuestionBank.Application.Dto;
-using QuestionBank.Application.Features.InterviewManagement;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using QuestionBank.Api.Controllers.Common;
 using QuestionBank.Application.Dto;
 using QuestionBank.Application.Features.InterviewManagement;
-using System.Net;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using QuestionBank.Application.Features.QuestionManagement;
 
 namespace QuestionBank.Api.Controllers;
@@ -107,9 +103,9 @@ public class QuestionBankController : BaseController
     [ProducesResponseType(typeof(List<QuestionUpdateDto>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [HttpGet("interviews/{id:int}/questions")]
-    public async Task<ActionResult<List<QuestionUpdateDto>>> GetQuestions([FromRoute] int id)
+    public async Task<ActionResult<List<QuestionUpdateDto>>> GetQuestionsForInterviewQuery([FromRoute] int id)
     {
-        var questions = await Mediator.Send(new GetQuestionsQuery(id));
+        var questions = await Mediator.Send(new GetQuestionsForInterviewQuery { InterviewId = id });
         return Ok(questions);
     }
 }
