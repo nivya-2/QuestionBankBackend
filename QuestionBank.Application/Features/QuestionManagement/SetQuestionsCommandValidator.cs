@@ -18,24 +18,9 @@ public class SetQuestionsCommandValidator : AbstractValidator<SetQuestionsComman
         // Validate each question in the list
         RuleForEach(x => x.Questions).ChildRules(question =>
         {
-            // Only apply validation when adding a new question (Id == 0)
-            question.When(q => q.Id == 0, () =>
-            {
-                // Ensure the question text is not null, empty, or whitespace
-                question.RuleFor(q => q.Question)
-                        .NotEmpty()
-                        .WithMessage("New questions must not be empty.")
-                        .MaximumLength(50)
-                        .WithMessage("Question must not exceed 50 characters.");
-            });
-
-            //Ensure that update does not result in exceeeding 50 characters for question
-            question.When(q => q.Id > 0, () =>
-            {
-                question.RuleFor(q => q.Question)
-                        .MaximumLength(50).WithMessage("Question must not exceed 50 characters.")
-                        .When(q => !string.IsNullOrWhiteSpace(q.Question));
-            });
+            question.RuleFor(q => q.Question)
+                .NotEmpty().WithMessage("Question must not be empty.")
+                .MaximumLength(50).WithMessage("Question must not exceed 50 characters.");
         });
 
         //Ensure that the request has distinct questions

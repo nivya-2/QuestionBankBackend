@@ -108,7 +108,7 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
             .Where(q => q.Id > 0 && !string.IsNullOrWhiteSpace(q.Question))
             .ToList();
 
-        // Validate deletions and updates reference valid existing questions
+        // Validate updates reference valid existing questions
         var invalidIds = updates
             .Where(q => !existingQuestionsDict.ContainsKey(q.Id))
             .Select(q => q.Id)
@@ -134,7 +134,9 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
         foreach (var incoming in incomingNormalized)
         {
             var isDuplicate = existingQuestionsNormalized
-                .Any(q => q.Key != incoming.Id && q.Value == incoming.Normalized);
+                .Any(q => q.Key != incoming.Id
+                && !deletions.Any(d => d.Id == q.Key)
+                && q.Value == incoming.Normalized);
 
             if (isDuplicate)
                 throw new InvalidOperationException($"Duplicate question for this interview: '{incoming.Normalized}'");
