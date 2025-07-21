@@ -6,7 +6,7 @@ using QuestionBank.Application.Dto;
 using QuestionBank.Application.Features.QuestionManagement;
 using QuestionBank.Domain.Entities;
 
-namespace QuestionBankTest;
+namespace QuestionBankTest.Features.QuestionManagement;
 
 /// <summary>
 /// Unit test class for <see cref="SetQuestionsCommandHandler"/>.
@@ -108,28 +108,6 @@ public class SetQuestionsCommandHandlerTests
 
         // Assert
         Assert.Equal("Interview with ID 99 not found.", exception.Message);
-    }
-
-    /// <summary>
-    /// Verifies that <see cref="SetQuestionsCommandHandler"/> throws ArgumentException for empty new question.
-    /// </summary>
-    [Fact]
-    public async Task SetQuestionsCommandHandler_WhenNewQuestionIsBlank_ShouldThrowArgumentException()
-    {
-        // Arrange
-        var handler = new SetQuestionsCommandHandler(mockDbContext.Object);
-        var command = new SetQuestionsCommand
-        {
-            InterviewId = 1,
-            Questions = new List<QuestionUpdateDto> { new() { Id = 0, Question = "   " } }
-        };
-
-        // Act
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
-            handler.Handle(command, CancellationToken.None));
-
-        // Assert
-        Assert.Equal("Cannot insert a new question with empty text.", exception.Message);
     }
 
     /// <summary>

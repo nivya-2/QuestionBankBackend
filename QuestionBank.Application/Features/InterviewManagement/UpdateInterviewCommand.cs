@@ -106,15 +106,13 @@ public class UpdateInterviewCommandHandler : IRequestHandler<UpdateInterviewComm
             throw new KeyNotFoundException($"Interview with ID {request.InterviewId} not found.");
 
         // Update basic properties (Role, Status, Experience).
-        if (!Enum.IsDefined(typeof(InterviewStatus), request.InterviewStatus))
-            throw new ArgumentException("Invalid interview status value.");
         interview.Status = request.InterviewStatus;
         interview.Role = request.Role;
         interview.Experience = request.Experience;
 
         // 1. Get current skill IDs from the Interview entity
         var existingSkillIds = interview.InterviewSkills.Select(x => x.SkillId).ToList();
-        var requestedSkillIds = request.SkillIds.Distinct().ToList();
+        var requestedSkillIds = request.SkillIds;
 
         // 2. Find SkillIds to remove and add
         var skillIdsToRemove = existingSkillIds.Except(requestedSkillIds).ToList();
