@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using QuestionBank.Application.Dto;
-using QuestionBank.Application.Features.InterviewManagement;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using QuestionBank.Api.Controllers.Common;
 using QuestionBank.Application.Dto;
 using QuestionBank.Application.Features.InterviewManagement;
-using System.Net;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using QuestionBank.Application.Features.QuestionManagement;
 
 namespace QuestionBank.Api.Controllers;
@@ -93,5 +89,19 @@ public class QuestionBankController : BaseController
         command.InterviewId = id;
         await Mediator.Send(command);
         return NoContent();
+    }
+
+    /// <summary>
+    /// Gets all the skills.
+    /// </summary>
+    /// <returns>
+    /// An <see cref="IActionResult"/> containing a list of <see cref="SkillsDto"/> objects and a HTTP 200 OK status.
+    /// </returns>
+    [ProducesResponseType(typeof(List<SkillsDto>), (int)HttpStatusCode.OK)]
+    [HttpGet("skills")]
+    public async Task<IActionResult> GetAllSkills()
+    {
+        var result = await Mediator.Send(new GetAllSkillsQuery());
+        return Ok(result);
     }
 }
