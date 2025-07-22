@@ -1,8 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using QuestionBank.Application.Contracts.Persistence;
 using QuestionBank.Application.Dto;
 using QuestionBank.Domain.Entities;
+
+namespace QuestionBank.Application.Features.QuestionManagement;
 
 /// <summary>
 /// Command to set the questions for a specific interview.
@@ -80,6 +83,89 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
         // 5. Save all changes to the database using dbContext.SaveChangesAsync.
         // 6. Return true to indicate the questions were successfully updated.
         #endregion
+        var interview = await _dbContext.Interviews
+                        .AsQueryable()
+                        .Include(i => i.Questions)
+                        .FirstOrDefaultAsync(i => i.Id == request.InterviewId, cancellationToken);
+
+        if (interview is null)
+            throw new KeyNotFoundException($"Interview with ID {request.InterviewId} not found.");
+
+        var existingQuestionsDict = interview.Questions.ToDictionary(q => q.Id);
+
+        var incomingIds = request.Questions
+                                 .Where(q => q.Id > 0)
+                                 .Select(q => q.Id)
+                                 .ToHashSet();
+
+        var newQuestions = request.Questions
+            .Where(q => q.Id == 0)
+            .ToList();
+        var deletions = interview.Questions
+            .Where(q => !incomingIds.Contains(q.Id))
+            .ToList();
+        var updates = request.Questions
+            .Where(q => q.Id > 0 && !string.IsNullOrWhiteSpace(q.Question))
+            .ToList();
+
+        // Validate updates reference valid existing questions
+        var invalidIds = updates
+            .Where(q => !existingQuestionsDict.ContainsKey(q.Id))
+            .Select(q => q.Id)
+            .ToList();
+        if (invalidIds.Any())
+            throw new KeyNotFoundException($"Some question IDs not found: {string.Join(", ", invalidIds)}");
+
+        // Create a dictionary of existing questions with normalized text for lookup
+        var existingQuestionsNormalized = interview.Questions
+            .ToDictionary(q => q.Id, q => q.Question.Trim().ToLowerInvariant());
+
+        // Prepare normalized input questions with ID
+        var incomingNormalized = request.Questions
+            .Where(q => !string.IsNullOrWhiteSpace(q.Question))
+            .Select(q => new
+            {
+                q.Id,
+                Normalized = q.Question!.Trim().ToLowerInvariant()
+            })
+            .ToList();
+
+        // Check each incoming question for duplicates (excluding self for updates)
+        foreach (var incoming in incomingNormalized)
+        {
+            var isDuplicate = existingQuestionsNormalized
+                .Any(q => q.Key != incoming.Id
+                && !deletions.Any(d => d.Id == q.Key)
+                && q.Value == incoming.Normalized);
+
+            if (isDuplicate)
+                throw new InvalidOperationException($"Duplicate question for this interview: '{incoming.Normalized}'");
+        }
+
+        // Add new questions
+        var entitiesToAdd = newQuestions.Select(q => new InterviewQuestionDetail
+        {
+            InterviewId = request.InterviewId,
+            Question = q.Question!.Trim()
+        }).ToList();
+        _dbContext.InterviewQuestionDetails.AddRange(entitiesToAdd);
+
+        // Remove deleted questions
+        var entitiesToDelete = deletions.Select(q => existingQuestionsDict[q.Id]).ToList();
+        _dbContext.InterviewQuestionDetails.RemoveRange(entitiesToDelete);
+
+        // Update changed questions
+        foreach (var update in updates)
+        {
+            var entity = existingQuestionsDict[update.Id];
+            var newText = update.Question!.Trim();
+            if (entity.Question != newText)
+            {
+                entity.Question = newText;
+                _dbContext.InterviewQuestionDetails.Update(entity);
+            }
+        }
+        await _dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
 }
