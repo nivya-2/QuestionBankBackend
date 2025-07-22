@@ -93,42 +93,54 @@ public class SetQuestionsCommandHandler : IRequestHandler<SetQuestionsCommand, b
 
         var existingQuestionsDict = interview.Questions.ToDictionary(q => q.Id);
 
+        var incomingIds = request.Questions
+                                 .Where(q => q.Id > 0)
+                                 .Select(q => q.Id)
+                                 .ToHashSet();
+
         var newQuestions = request.Questions
             .Where(q => q.Id == 0)
             .ToList();
-        var deletions = request.Questions
-            .Where(q => q.Id > 0 && string.IsNullOrWhiteSpace(q.Question))
+        var deletions = interview.Questions
+            .Where(q => !incomingIds.Contains(q.Id))
             .ToList();
         var updates = request.Questions
             .Where(q => q.Id > 0 && !string.IsNullOrWhiteSpace(q.Question))
             .ToList();
 
-        // Validate deletions and updates reference valid existing questions
-        var invalidIds = deletions.Concat(updates)
+        // Validate updates reference valid existing questions
+        var invalidIds = updates
             .Where(q => !existingQuestionsDict.ContainsKey(q.Id))
             .Select(q => q.Id)
             .ToList();
         if (invalidIds.Any())
             throw new KeyNotFoundException($"Some question IDs not found: {string.Join(", ", invalidIds)}");
 
-        // Normalize and collect new + updated questions for duplication check
-        var newOrUpdatedQuestions = newQuestions
-            .Concat(updates)
-            .Select(q => q.Question!.Trim().ToLowerInvariant())
+        // Create a dictionary of existing questions with normalized text for lookup
+        var existingQuestionsNormalized = interview.Questions
+            .ToDictionary(q => q.Id, q => q.Question.Trim().ToLowerInvariant());
+
+        // Prepare normalized input questions with ID
+        var incomingNormalized = request.Questions
+            .Where(q => !string.IsNullOrWhiteSpace(q.Question))
+            .Select(q => new
+            {
+                q.Id,
+                Normalized = q.Question!.Trim().ToLowerInvariant()
+            })
             .ToList();
 
-        //Get Existing questions under the interview in a normalised format
-        var existingQuestionsForInterview = interview.Questions
-        .Select(q => q.Question.Trim().ToLowerInvariant()).ToHashSet();
+        // Check each incoming question for duplicates (excluding self for updates)
+        foreach (var incoming in incomingNormalized)
+        {
+            var isDuplicate = existingQuestionsNormalized
+                .Any(q => q.Key != incoming.Id
+                && !deletions.Any(d => d.Id == q.Key)
+                && q.Value == incoming.Normalized);
 
-        //Check for duplicate between questions in request and questions in DB
-        var duplicate = newOrUpdatedQuestions
-                        .FirstOrDefault(text => existingQuestionsForInterview
-                        .Contains(text));
-
-        if (duplicate is not null)
-            throw new InvalidOperationException($"Duplicate question for this interview: '{duplicate}'");
-
+            if (isDuplicate)
+                throw new InvalidOperationException($"Duplicate question for this interview: '{incoming.Normalized}'");
+        }
 
         // Add new questions
         var entitiesToAdd = newQuestions.Select(q => new InterviewQuestionDetail
