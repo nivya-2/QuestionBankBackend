@@ -92,6 +92,24 @@ public class QuestionBankController : BaseController
     }
 
     /// <summary>
+    /// Retrieves all questions associated with a specific interview.
+    /// </summary>
+    /// <param name="id">The ID of the interview whose questions are to be fetched.</param>
+    /// <returns>
+    /// A list of <see cref="QuestionUpdateDto"/> representing the interview's questions.
+    /// </returns>
+    /// <response code="200">Returns the list of questions (empty if none exist).</response>
+    /// <response code="404">Returned when the specified interview does not exist.</response>
+    [ProducesResponseType(typeof(List<QuestionUpdateDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [HttpGet("interviews/{id:int}/questions")]
+    public async Task<ActionResult<List<QuestionUpdateDto>>> GetQuestionsForInterviewQuery([FromRoute] int id)
+    {
+        var questions = await Mediator.Send(new GetQuestionsForInterviewQuery { InterviewId = id });
+        return Ok(questions);
+    }
+
+    /// <summary>
     /// Gets all the skills.
     /// </summary>
     /// <returns>
