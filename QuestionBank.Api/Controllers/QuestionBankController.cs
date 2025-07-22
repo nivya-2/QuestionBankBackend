@@ -108,4 +108,18 @@ public class QuestionBankController : BaseController
         var questions = await Mediator.Send(new GetQuestionsForInterviewQuery { InterviewId = id });
         return Ok(questions);
     }
+
+    /// <summary>
+    /// Gets all the skills.
+    /// </summary>
+    /// <returns>
+    /// An <see cref="IActionResult"/> containing a list of <see cref="SkillsDto"/> objects and a HTTP 200 OK status.
+    /// </returns>
+    [ProducesResponseType(typeof(List<SkillsDto>), (int)HttpStatusCode.OK)]
+    [HttpGet("skills")]
+    public async Task<IActionResult> GetAllSkills()
+    {
+        var result = await Mediator.Send(new GetAllSkillsQuery());
+        return Ok(result);
+    }
 }
