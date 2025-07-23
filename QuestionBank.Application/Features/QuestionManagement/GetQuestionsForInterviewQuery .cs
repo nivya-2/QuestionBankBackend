@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using QuestionBank.Application.Contracts.Persistence;
 using QuestionBank.Application.Dto;
 
@@ -55,8 +56,19 @@ public class GetQuestionsForInterviewQueryHandler : IRequestHandler<GetQuestions
         //    - Question: the question text
         // 5. Return the list of QuestionUpdateDto.
         #endregion
-
-        return new List<QuestionUpdateDto>();
+        var interview = await _dbContext.Interviews
+                        .AsQueryable()
+                        .Include(i => i.Questions)
+                        .FirstOrDefaultAsync(i => i.Id == request.InterviewId, cancellationToken);
+        if (interview is null)
+            throw new KeyNotFoundException($"Interview with ID {request.InterviewId} not found.");
+        var interviewQuestions = interview.Questions.Select(
+            q => new QuestionUpdateDto() {
+                Id =q.Id,
+                Question = q.Question,
+            }
+            ).ToList();
+        return interviewQuestions;
     }
 }
 
