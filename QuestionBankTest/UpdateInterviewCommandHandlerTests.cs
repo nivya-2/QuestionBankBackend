@@ -3,6 +3,7 @@ using MockQueryable.Moq;
 using Moq;
 using QuestionBank.Application.Contracts.Persistence;
 using QuestionBank.Domain.Entities;
+using QuestionBank.Application.Features.InterviewManagement;
 using static QuestionBank.Shared.QuestionBankEnums;
 
 namespace QuestionBankTest;
