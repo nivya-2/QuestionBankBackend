@@ -57,17 +57,20 @@ public class GetQuestionsForInterviewQueryHandler : IRequestHandler<GetQuestions
         // 5. Return the list of QuestionUpdateDto.
         #endregion
         var interview = await _dbContext.Interviews
-                        .AsQueryable()
                         .Include(i => i.Questions)
                         .FirstOrDefaultAsync(i => i.Id == request.InterviewId, cancellationToken);
+
         if (interview is null)
             throw new KeyNotFoundException($"Interview with ID {request.InterviewId} not found.");
-        var interviewQuestions = interview.Questions.Select(
-            q => new QuestionUpdateDto() {
-                Id =q.Id,
-                Question = q.Question,
-            }
-            ).ToList();
+
+        var interviewQuestions = interview.Questions
+            .Select(q => new QuestionUpdateDto
+            {
+                Id = q.Id,
+                Question = q.Question
+            })
+            .ToList();
+
         return interviewQuestions;
     }
 }
