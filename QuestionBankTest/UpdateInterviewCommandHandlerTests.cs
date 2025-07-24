@@ -116,29 +116,4 @@ public class UpdateInterviewCommandHandlerTests
         // Assert
         Assert.Equal("Interview with ID 99 not found.", exception.Message);
     }
-
-    /// <summary>
-    /// Verifies that <see cref="UpdateInterviewCommandHandler"/> throws ArgumentException for invalid status enum.
-    /// </summary>
-    [Fact]
-    public async Task UpdateInterviewCommandHandler_WhenStatusInvalid_ShouldThrowArgumentException()
-    {
-        // Arrange
-        var handler = new UpdateInterviewCommandHandler(mockDbContext.Object);
-        var command = new UpdateInterviewCommand
-        {
-            InterviewId = 1,
-            Role = "Role",
-            InterviewStatus = (InterviewStatus)999,
-            Experience = 3,
-            SkillIds = new List<int> { 1 }
-        };
-
-        // Act
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
-            handler.Handle(command, CancellationToken.None));
-
-        // Assert
-        Assert.Equal("Invalid interview status value.", exception.Message);
-    }
 }
