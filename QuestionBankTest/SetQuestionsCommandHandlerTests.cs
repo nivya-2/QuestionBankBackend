@@ -123,7 +123,7 @@ public class SetQuestionsCommandHandlerTests
             InterviewId = 1,
             Questions = new List<QuestionUpdateDto>
             {
-                new() { Id = 99, Question = "" },
+                new() { Id = 99, Question = "Updated Question V2" },
                 new() { Id = 88, Question = "Updated Question" }
             }
         };
@@ -134,5 +134,31 @@ public class SetQuestionsCommandHandlerTests
 
         // Assert
         Assert.Equal("Some question IDs not found: 99, 88", exception.Message);
+    }
+
+    /// <summary>
+    /// Verifies that <see cref="SetQuestionsCommandHandler"/> throws <see cref="InvalidOperationException"> for duplicate questions
+    /// </summary>
+    [Fact]
+    public async Task SetQuestionsCommandHandler_WhenDuplicateQuestions_ShouldThrowKeyNotFoundException()
+    {
+        // Arrange
+        var handler = new SetQuestionsCommandHandler(mockDbContext.Object);
+        var command = new SetQuestionsCommand
+        {
+            InterviewId = 1,
+            Questions = new List<QuestionUpdateDto>
+            {
+                new() { Id = 1, Question = "Old Question 1" },
+                new() { Id = 0, Question = "Old Question 1" }
+            }
+        };
+
+        // Act
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            handler.Handle(command, CancellationToken.None));
+
+        // Assert
+        Assert.Equal("Duplicate question for this interview: 'old question 1'", exception.Message);
     }
 }
